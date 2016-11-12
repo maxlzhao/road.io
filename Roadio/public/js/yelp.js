@@ -10,6 +10,7 @@ var test_list = [{lat : 37.8719,
              {lat : 32.8801,
               lng : -117.2340}]
 
+
 // Global constants
 
 var auth = {
@@ -30,19 +31,35 @@ within 25 miles of each location in the LISTOFCOORDS.
 
 Warning: The function makes asynchronous calls, so the list that is returned
 is initially empty. */
-function getLocationsForWaypoints(listOfCoords, categoriesList, getFood = true) {
-    resultArr = [];
+function getLocationsForWaypoints(callback, listOfCoords, categoriesList, getFood="food") {
+    var resultArr = [];
+    var deferred = [];
+
     if (getFood) {
         for (i = 0; i < listOfCoords.length; i++) {
-            getNearbyRestaurants(listOfCoords[i].lat, listOfCoords[i].lng, resultArr, categoriesList[i]);
+            deferred.push(getNearbyRestaurants(listOfCoords[i].lat, listOfCoords[i].lng, categoriesList[i]));
         }
+        $.when.apply($, deferred).done(function(){
+          var objects = arguments;
+          for (k = 0; k < listOfCoords.length; k += 1) {
+              extractRestaurants(objects[k][0], resultArr);
+          };
+          callback(resultArr);
+        });
     } else {
         for (i = 0; i < listOfCoords.length; i++) {
-            getNearbyPOI(listOfCoords[i].lat, listOfCoords[i].lng, resultArr, categoriesList[i]);
+            deferred.push(getNearbyPOI(listOfCoords[i].lat, listOfCoords[i].lng, resultArr, categoriesList[i]));
         }
+        $.when.apply($, deferred).done(function(){
+          var objects = arguments;
+          for (k = 0; k < listOfCoords.length; k += 1) {
+              extractPOI(objects[k][0], resultArr);
+          };
+          callback(resultArr);
+        });
     }
-    return resultArr;
 }
+
 
 ////////////////////////
 //  Helper Functions  //
@@ -60,11 +77,10 @@ coordinate : An object whose fields are latitude and longitude.
 rating     : The rating of the restaurant.
 categories : The string containing the categories to which
              a specific restaurant belongs. */
-function getNearbyRestaurants(lat, lon, list, categories="food") {
+function getNearbyRestaurants(lat, lon, categories="food") {
     var terms = 'food';
     var ll = lat.toString() + ',' + lon.toString();
     var category_filter = categories;
-
 
     var accessor = {
         consumerSecret : auth.consumerSecret,
@@ -75,7 +91,7 @@ function getNearbyRestaurants(lat, lon, list, categories="food") {
     parameters.push(['term', terms]);
     parameters.push(['ll', ll]);
     parameters.push(['category_filter', category_filter]),
-    parameters.push(['callback', 'restaurantExtract']);
+    parameters.push(['callback', 'callback']);
     parameters.push(['oauth_consumer_key', auth.consumerKey]);
     parameters.push(['oauth_consumer_secret', auth.consumerSecret]);
     parameters.push(['oauth_token', auth.accessToken]);
@@ -92,17 +108,13 @@ function getNearbyRestaurants(lat, lon, list, categories="food") {
 
     var parameterMap = OAuth.getParameterMap(message.parameters);
 
-    $.ajax({
+    return $.ajax({
         'url' : message.action,
         'data' : parameterMap,
         'dataType' : 'jsonp',
         'cache': true
     })
-    .done(function(data, textStatus, jqXHR) {
-            extract(data, list);
-            console.log(list)
-        }
-    )
+    .done(function(data, textStatus, jqXHR) {})
     .fail(function(jqXHR, textStatus, errorThrown) {
             console.log('error[' + errorThrown + '], status[' + textStatus + '], jqXHR[' + JSON.stringify(jqXHR) + ']');
         }
@@ -149,16 +161,13 @@ function getNearbyPOI(lat, lon, list, categories = '') {
 
     var parameterMap = OAuth.getParameterMap(message.parameters);
 
-    $.ajax({
+    return $.ajax({
         'url' : message.action,
         'data' : parameterMap,
         'dataType' : 'jsonp',
         'cache': true
     })
-    .done(function(data, textStatus, jqXHR) {
-            extract(data, list);
-        }
-    )
+    .done(function(data, textStatus, jqXHR) {})
     .fail(function(jqXHR, textStatus, errorThrown) {
             console.log('error[' + errorThrown + '], status[' + textStatus + '], jqXHR[' + JSON.stringify(jqXHR) + ']');
         }
@@ -167,8 +176,23 @@ function getNearbyPOI(lat, lon, list, categories = '') {
 
 /* Helper function which extracts relevant information from returned
 JSON, and appends it to a list of results. */
-function extract(data, list) {
+function extractRestaurants(data, list) {
     for (i = 0; i < Math.min(data.businesses.length, 5); i++) {
+      var cats = '';
+      for (j = 0; j < Math.min(data.businesses[i].categories.length, 3); j++) {
+        cats += data.businesses[i].categories[j][0] + ", ";
+      }
+      cats = cats.slice(0, -2);
+
+      list.push({name        :  data.businesses[i].name,
+                 coordinate  :  data.businesses[i].location.coordinate,
+                 rating      :  data.businesses[i].rating,
+                 categories  :  cats});
+    }
+}
+
+function extractPOI(data, list) {
+    for (i = 0; i < Math.min(data.businesses.length, 10); i++) {
       var cats = '';
       for (j = 0; j < Math.min(data.businesses[i].categories.length, 3); j++) {
         cats += data.businesses[i].categories[j][0] + ", ";
