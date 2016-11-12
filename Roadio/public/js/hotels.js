@@ -1,3 +1,25 @@
+/**
+     * Return a list of hotels near a specified location sorted by price.
+     * @param {number} latitude - latitude of location, required
+     * @param {number} longitude - longitude of location, required
+     * @param {number} radius - radius of location, required
+     * @param {XXXX-YY-ZZ} check_in - date of check in, must be in formatted as specified and is required
+     * @param {number} check_out - date of check out, must be in formatted as specified but is not required
+        if you do not provide this, a function will take the day after the check_in day.
+     * @param {number} num_results - specify how many hotels in a list you want considering there are more than you want.
+     * @return {[{
+                    "averageRating" : 0
+                    "latitude" : 0,
+                    "longitude" : 0,
+                    "currency"  : null (String),
+                    "daily_rate" : 0,
+                    "property_name" : null (String),
+                    }
+                    .
+                    .
+                    .
+                    ]} List of Hotel dictionary objects
+     */
 function findHotelsByPrice(latitude, longitude, radius, check_in, check_out, num_results) {
     check_out = check_out || findNextDay(check_in);
 	var amadeusURL = "http://api.sandbox.amadeus.com/v1.2/hotels/search-circle?latitude=" + latitude + 
@@ -48,7 +70,28 @@ function findHotelsByPrice(latitude, longitude, radius, check_in, check_out, num
     listOfHotels.sort(function(a,b){return a.daily_rate - b.daily_rate});
     return listOfHotels;
 }
-
+/**
+     * Return a list of hotels near a specified location sorted by rating.
+     * @param {number} latitude - latitude of location, required
+     * @param {number} longitude - longitude of location, required
+     * @param {number} radius - radius of location, required
+     * @param {XXXX-YY-ZZ} check_in - date of check in, must be in formatted as specified and is required
+     * @param {number} check_out - date of check out, must be in formatted as specified but is not required
+        if you do not provide this, a function will take the day after the check_in day.
+     * @param {number} num_results - specify how many hotels in a list you want considering there are more than you want.
+     * @return {[{
+                    "averageRating" : 0
+                    "latitude" : 0,
+                    "longitude" : 0,
+                    "currency"  : null (String),
+                    "daily_rate" : 0,
+                    "property_name" : null (String),
+                    }
+                    .
+                    .
+                    .
+                    ]} List of Hotel dictionary objects
+     */
 function findHotelsByRating(latitude, longitude, radius, check_in, check_out, num_results) {
     check_out = check_out || findNextDay(check_in);
     var amadeusURL = "http://api.sandbox.amadeus.com/v1.2/hotels/search-circle?latitude=" + latitude + 
@@ -88,24 +131,100 @@ function findHotelsByRating(latitude, longitude, radius, check_in, check_out, nu
     return listOfHotels;
 }
 
-function findHotelsGivenManyLocationsByPrice(arr_locations) {
+/**
+     * Return a list of hotels near a specified location sorted by price.
+     * @param {[var obj1 = {
+                "latitude"  : path[0].lat(),
+                "longitude" : path[0].lng(),
+                "radius"    : 30,
+                "check_in"  : '2016-11-13',
+                "check_out" : '2016-11-14'
+            }
+            var obj2 = {
+                "latitude"  : path[1].lat(),
+                "longitude" : path[1].lng(),
+                "radius"    : 30,
+                "check_in"  : '2016-11-13',
+                "check_out" : null
+            }
+            var obj3 = {
+                "latitude"  : path[2].lat(),
+                "longitude" : path[2].lng(),
+                "radius"    : 30,
+                "check_in"  : '2016-11-15',
+                "check_out" : '2016-11-17'
+            }
+            var arr = [obj1, obj2, obj3];]]} arr_locations - list of query objects
+     * @param {number} num_results - how many results do you want for each query
+     * @return {[{
+                    "averageRating" : 0
+                    "latitude" : 0,
+                    "longitude" : 0,
+                    "currency"  : null (String),
+                    "daily_rate" : 0,
+                    "property_name" : null (String),
+                    }
+                    .
+                    .
+                    .
+                    ]} List of Hotel dictionary objects
+     */
+function findHotelsGivenManyLocationsByPrice(arr_locations, num_results) {
     listTotal = [];
     for (objNum in arr_locations) {
         var obj = arr_locations[objNum];
         //console.log(obj);
-        list = findHotelsByPrice(obj["latitude"], obj["longitude"], obj["radius"], obj["check_in"], obj["check_out"], 10);
+        list = findHotelsByPrice(obj["latitude"], obj["longitude"], obj["radius"], obj["check_in"], obj["check_out"], num_results);
         listTotal = listTotal.concat(list);
     }
     listTotal.sort(function(a,b){return a.daily_rate - b.daily_rate});
     return listTotal;
 }
 
-function findHotelsGivenManyLocationsByRating(arr_locations) {
+/**
+     * Return a list of hotels near a specified location sorted by rating.
+     * @param {[var obj1 = {
+                "latitude"  : path[0].lat(),
+                "longitude" : path[0].lng(),
+                "radius"    : 30,
+                "check_in"  : '2016-11-13',
+                "check_out" : '2016-11-14'
+            }
+            var obj2 = {
+                "latitude"  : path[1].lat(),
+                "longitude" : path[1].lng(),
+                "radius"    : 30,
+                "check_in"  : '2016-11-13',
+                "check_out" : null
+            }
+            var obj3 = {
+                "latitude"  : path[2].lat(),
+                "longitude" : path[2].lng(),
+                "radius"    : 30,
+                "check_in"  : '2016-11-15',
+                "check_out" : '2016-11-17'
+            }
+            var arr = [obj1, obj2, obj3];]]} arr_locations - list of query objects
+     * @param {number} num_results - how many results do you want for each query
+     * @return {[{
+                    "averageRating" : 0
+                    "latitude" : 0,
+                    "longitude" : 0,
+                    "currency"  : null (String),
+                    "daily_rate" : 0,
+                    "property_name" : null (String),
+                    }
+                    .
+                    .
+                    .
+                    ]} List of Hotel dictionary objects
+     */
+function findHotelsGivenManyLocationsByRating(arr_locations, num_results) {
     listTotal = [];
     for (objNum in arr_locations) {
         var obj = arr_locations[objNum];
         //console.log(obj);
-        list = findHotelsByPrice(obj["latitude"], obj["longitude"], obj["radius"], obj["check_in"], obj["check_out"], 10);
+        list = findHotelsByPrice(obj["latitude"], obj["longitude"], obj["radius"], obj["check_in"], obj["check_out"], num_results);
         listTotal = listTotal.concat(list);
     }
     listTotal.sort(function(a,b){return a.averageRating - b.averageRating});
@@ -113,6 +232,11 @@ function findHotelsGivenManyLocationsByRating(arr_locations) {
     return listTotal;
 }
 
+/**
+     * HELPER FUNCTION: Returns next day given a day, used if check out days are not provided
+     * @param {XXXX-YY-ZZ} day - given day with specified format, Required
+     * @return {XXXX-YY-ZZ} next day
+     */
 function findNextDay(day) {
     var year = day.substring(0, 4);
     var month = day.substring(5, 7);
