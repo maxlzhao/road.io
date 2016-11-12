@@ -1,8 +1,16 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+#right-panel {
+font-family: 'Roboto','sans-serif';
+line-height: 30px;
+padding-left: 10px;
 }
 
-a {
-  color: #00B7FF;
+html, body {
+height: 100%;
+margin: 0;
+padding: 0;
+}
+#map {
+float: left;
+height: 100%;
+width: 100%;
 }
