@@ -1,11 +1,13 @@
 var locationsOnPath =[];
 var totalDistance = 0;
 var markers=[];
+var directionService;
+var directionsDisplay;
+var map;
 function initMap() {
-    var directionsService = new google.maps.DirectionsService;
-    var directionsDisplay = new google.maps.DirectionsRenderer;
-    var geocoder = new google.maps.Geocoder;
-    var map = new google.maps.Map(document.getElementById('map'), {
+    directionsService = new google.maps.DirectionsService;
+    directionsDisplay = new google.maps.DirectionsRenderer;
+    map = new google.maps.Map(document.getElementById('map'), {
       zoom: 12,
       center: {lat: 37, lng: -122}
     });
@@ -15,7 +17,7 @@ function initMap() {
     var A = "2227 Piedmont Avenue"
     var B = "100 Universal City Plaza, Universal City"
     var currentPos;
-    locationsOnPath = findRoute(map, directionsService,directionsDisplay, numDays, geocoder, A,B);
+    locationsOnPath = findRoute(A, B);
     waypts=[]
     pins=[]
 }
@@ -24,7 +26,7 @@ document.body.addEventListener("click", function(){
     console.log(totalDistance)
 });
 
-function findRoute(map, directionsService,directionsDisplay, numDays, geocoder, source, destination){
+function findRoute(source, destination){
     directionsService.route({
         origin: source,
         destination: destination,
