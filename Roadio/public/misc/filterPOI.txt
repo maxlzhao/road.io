@@ -1,0 +1,13 @@
+active
+arts
+boatcharters
+caricatures
+facepainting
+magicians
+musicians
+tours
+resorts
+skiresorts
+localflavor
+nightlife
+landmarks
