@@ -31,13 +31,13 @@ within 25 miles of each location in the LISTOFCOORDS.
 
 Warning: The function makes asynchronous calls, so the list that is returned
 is initially empty. */
-function getLocationsForWaypoints(callback, listOfCoords, categoriesList, getFood="food") {
+function getLocationsForWaypoints(listOfCoords, categoriesList, getFood=true, callback) {
     var resultArr = [];
     var deferred = [];
 
     if (getFood) {
         for (i = 0; i < listOfCoords.length; i++) {
-            deferred.push(getNearbyRestaurants(listOfCoords[i].lat, listOfCoords[i].lng, categoriesList[i]));
+            deferred.push(getNearbyRestaurants(listOfCoords[i].lat(), listOfCoords[i].lng(), categoriesList[i]));
         }
         $.when.apply($, deferred).done(function(){
           var objects = arguments;
@@ -48,7 +48,7 @@ function getLocationsForWaypoints(callback, listOfCoords, categoriesList, getFoo
         });
     } else {
         for (i = 0; i < listOfCoords.length; i++) {
-            deferred.push(getNearbyPOI(listOfCoords[i].lat, listOfCoords[i].lng, resultArr, categoriesList[i]));
+            deferred.push(getNearbyPOI(listOfCoords[i].lat(), listOfCoords[i].lng(), resultArr, categoriesList[i]));
         }
         $.when.apply($, deferred).done(function(){
           var objects = arguments;

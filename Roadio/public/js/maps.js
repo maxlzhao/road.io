@@ -17,20 +17,21 @@ function initMap() {
     var A = "2227 Piedmont Avenue"
     var B = "100 Universal City Plaza, Universal City"
     var currentPos;
-    locationsOnPath = findRoute(A, B);
+    locationsOnPath = findRoute(A, B,function(bl){});
     waypts=[]
     pins=[]
 }
-document.body.addEventListener("click", function(){
+/*document.body.addEventListener("click", function(){
     console.log(locationsOnPath)
     console.log(totalDistance)
 });
+*/
 
 function getTotalDistanceInMiles(){
     return totalDistance*0.000621371
 }
 
-function findRoute(source, destination){
+function findRoute(source, destination, callback){
     directionsService.route({
         origin: source,
         destination: destination,
@@ -43,19 +44,22 @@ function findRoute(source, destination){
             totalDistance = 0;
             for(var i=0;i<route_legs.length;i++){
                 totalDistance += route_legs[i].distance.value
-                console.log(route_legs[i])
+                //console.log(route_legs[i])
             }
-            return response.routes[0].overview_path
+            return callback(response.routes[0].overview_path)
         }
     })
-
 }
-
-function updateRoute(map, directionsService,directionsDisplay, numDays, geocoder, source, destination, waypts){
+//assume waypoints are latlngs
+function updateRoute(source, destination, waypts, callback){
+    waypoints=[]
+    for(var i=0;i<waypts.length;i++){
+        waypoints[i]={location:waypts[i]}
+    }
     directionsService.route({
         origin: source,
         destination: destination,
-        waypoints: waypts,
+        waypoints: waypoints,
         optimizeWaypoints: true,
         travelMode: "DRIVING"
     }, function(response, status){
@@ -67,10 +71,9 @@ function updateRoute(map, directionsService,directionsDisplay, numDays, geocoder
                 totalDistance += route_legs[i].distance.value
                 console.log(route_legs[i])
             }
-            return response.routes[0].overview_path;
+            callback(response.routes[0].overview_path);
         }
     })
-    
 }
 
 function addPins(map,pins,label){
