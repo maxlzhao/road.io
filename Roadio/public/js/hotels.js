@@ -5,7 +5,19 @@ function findHotelsByPrice(latitude, longitude, radius, check_in, check_out, num
 	"&cy=USD&number_of_results=" + num_results + "&apikey=1NN8rvmFXgT3rGsfyYfJ9zygeZx1sXoU";
 	//console.log(amadeusURL);
 	var xhReq = new XMLHttpRequest();
-	xhReq.open("GET", amadeusURL, false);
+	xhReq.open("GET", amadeusURL, true);
+    xhReq.onload = function (e) {
+        if (xhReq.readyState === 4) {
+            if (xhReq.status === 200) {
+                console.log(xhReq.responseText);
+            } else {
+                console.error(xhReq.statusText);
+            }
+        }
+    };
+    xhr.onerror = function (e) {
+        console.error(xhReq.statusText);
+    };
 	xhReq.send(null);
 	var jsonObj = JSON.parse(xhReq.responseText);
     //console.log(jsonObj);
