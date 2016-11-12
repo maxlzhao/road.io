@@ -4,8 +4,8 @@
 // <script type="text/javascript" src="https://raw.githubusercontent.com/rmxdave/phnx/master/lib/OAuth/OAuth.js"></script>
 // <script type="text/javascript" src="https://raw.githubusercontent.com/rmxdave/phnx/master/lib/OAuth/SHA1.js"></script>
 
-/* Debugging purposes only */
-test_list = [{lat : 37.8719,
+// Debugging purposes only
+var test_list = [{lat : 37.8719,
               lng : -122.2585},
              {lat : 32.8801,
               lng : -117.2340}]
