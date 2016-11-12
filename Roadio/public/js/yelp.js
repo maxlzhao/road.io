@@ -26,14 +26,34 @@ var auth = {
 var POICategories =
     'amusementparks,climbing,beaches,hiking,sailing,surfing,arts,boatcharters,caricatures,facepainting,magicians,musicians,tours,resorts,skiresorts,localflavor,nightlife,landmarks';
 
-/* Returns a list containing either restaurants or points of interest
-within 25 miles of each location in the LISTOFCOORDS.
+/* Applies a callback function on a list containing either
+restaurants or points of interest within 25 miles of each location in the LISTOFCOORDS.
 
-Warning: The function makes asynchronous calls, so the list that is returned
-is initially empty. */
+Required arguments:
+  callback     : a function which is applied to resultArr
+  listOfCoords : a list of of objcts with lat and lng fields.
+  categories   : a string of comma-separated categories.
+  getFood      : determines whether restaurants or POIs are returned.
+
+resultArr object fields:
+  name         : The name of the restaurant.
+  coordinate   : An object whose fields are latitude and longitude.
+  rating       : The rating of the restaurant.
+  categories   : The string containing the categories to which
+                 a specific restaurant belongs. */
+    
 function getLocationsForWaypoints(listOfCoords, categoriesList, getFood=true, callback) {
     var resultArr = [];
     var deferred = [];
+    function reversecompare(a,b) {
+        if (a.est_score > b.est_score) {
+            return -1;
+        } else if (a.est_score < b.est_score) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 
     if (getFood) {
         for (i = 0; i < listOfCoords.length; i++) {
@@ -44,6 +64,7 @@ function getLocationsForWaypoints(listOfCoords, categoriesList, getFood=true, ca
           for (k = 0; k < listOfCoords.length; k += 1) {
               extractRestaurants(objects[k][0], resultArr);
           };
+          resultArr.sort(reversecompare);
           callback(resultArr);
         });
     } else {
@@ -55,6 +76,7 @@ function getLocationsForWaypoints(listOfCoords, categoriesList, getFood=true, ca
           for (k = 0; k < listOfCoords.length; k += 1) {
               extractPOI(objects[k][0], resultArr);
           };
+          resultArr.sort(reversecompare);
           callback(resultArr);
         });
     }
@@ -66,21 +88,12 @@ function getLocationsForWaypoints(listOfCoords, categoriesList, getFood=true, ca
 ////////////////////////
 
 /* Makes a request through the Yelp API to obtain a list of
-nearby restaurants. Must pass in a list into which the result
-is appended.
-
-Each resulting object for each restaurant has the
-following fields:
-
-name       : The name of the restaurant.
-coordinate : An object whose fields are latitude and longitude.
-rating     : The rating of the restaurant.
-categories : The string containing the categories to which
-             a specific restaurant belongs. */
+nearby restaurants. */
 function getNearbyRestaurants(lat, lon, categories="food") {
     var terms = 'food';
     var ll = lat.toString() + ',' + lon.toString();
     var category_filter = categories;
+    var sort = 2;
 
     var accessor = {
         consumerSecret : auth.consumerSecret,
@@ -90,7 +103,8 @@ function getNearbyRestaurants(lat, lon, categories="food") {
     var parameters = [];
     parameters.push(['term', terms]);
     parameters.push(['ll', ll]);
-    parameters.push(['category_filter', category_filter]),
+    parameters.push(['category_filter', category_filter]);
+    parameters.push(['sort', sort]);
     parameters.push(['callback', 'callback']);
     parameters.push(['oauth_consumer_key', auth.consumerKey]);
     parameters.push(['oauth_consumer_secret', auth.consumerSecret]);
@@ -123,18 +137,11 @@ function getNearbyRestaurants(lat, lon, categories="food") {
 
 /* Makes a request through the Yelp API to obtain a list of nearby
 points of interest. Must pass in a list into which the result
-is appended.
-
-Each resulting object for each point of interest has the
-following fields:
-name       : The name of the point of interest.
-coordinate : An object whose fields are latitude and longitude.
-rating     : The rating of the point of interest.
-categories : The string containing the categories to which
-             a specific point of interest belongs. */
+is appended. */
 function getNearbyPOI(lat, lon, list, categories = '') {
     var ll = lat.toString() + ',' + lon.toString();
     var category_filter = 'landmarks';
+    var sort = 2;
 
     var accessor = {
         consumerSecret : auth.consumerSecret,
@@ -143,8 +150,9 @@ function getNearbyPOI(lat, lon, list, categories = '') {
 
     var parameters = [];
     parameters.push(['ll', ll]);
-    parameters.push(['category_filter', category_filter]),
+    parameters.push(['category_filter', category_filter]);
     parameters.push(['callback', 'restaurantExtract']);
+    parameters.push(['sort', sort]);
     parameters.push(['oauth_consumer_key', auth.consumerKey]);
     parameters.push(['oauth_consumer_secret', auth.consumerSecret]);
     parameters.push(['oauth_token', auth.accessToken]);
@@ -187,10 +195,14 @@ function extractRestaurants(data, list) {
       list.push({name        :  data.businesses[i].name,
                  coordinate  :  data.businesses[i].location.coordinate,
                  rating      :  data.businesses[i].rating,
-                 categories  :  cats});
+                 categories  :  cats,
+                 est_score   :  ((data.businesses[i].rating / 5) * data.businesses[i].review_count + 1)
+                                / (data.businesses[i].review_count + 2)});
     }
 }
 
+/* Helper function which extracts relevant information from returned
+JSON, and appends it to a list of results. */
 function extractPOI(data, list) {
     for (i = 0; i < Math.min(data.businesses.length, 10); i++) {
       var cats = '';
@@ -199,9 +211,11 @@ function extractPOI(data, list) {
       }
       cats = cats.slice(0, -2);
 
-      list.push({name        :  data.businesses[i].name,
-                 coordinate  :  data.businesses[i].location.coordinate,
-                 rating      :  data.businesses[i].rating,
-                 categories  :  cats});
+      list.push({name         : data.businesses[i].name,
+                 coordinate   : data.businesses[i].location.coordinate,
+                 rating       : data.businesses[i].rating,
+                 categories   : cats,
+                 est_score    : ((data.businesses[i].rating / 5) * data.businesses[i].review_count + 1)
+                                / (data.businesses[i].review_count + 2)});
     }
 }
