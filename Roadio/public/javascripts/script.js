@@ -9,12 +9,22 @@ function initMap() {
     var numDays = 5;
 
     directionsDisplay.setMap(map);
-    
+    var A = "2227 Piedmont Avenue"
+    var B = "100 Universal City Plaza, Universal City"
     var currentPos;
-    calculateAndDisplayRoute(map, directionsService,directionsDisplay, numDays, geocoder, "2227 Piedmont Avenue","100 Universal City Plaza, Universal City");
+    locationsOnPath=findRoute(map, directionsService,directionsDisplay, numDays, geocoder, A,B);
+    waypts=[]
+    google.maps.event.addListener(map, 'click', function(event) {
+        waypts.push({location: event.latLng})
+        var marker = new google.maps.Marker({
+            position: event.latLng, 
+            map: map
+        });
+        updateRoute(map,directionsService,directionsDisplay, numDays, geocoder, A, B, waypts)
+    });
 }
 
-function calculateAndDisplayRoute(map, directionsService,directionsDisplay, numDays, geocoder, source, destination){
+function findRoute(map, directionsService,directionsDisplay, numDays, geocoder, source, destination){
     /*geocoder.geocode({'address':destination}, function(results,status){
         if(status == "OK"){
             result= results[0]
@@ -29,7 +39,7 @@ function calculateAndDisplayRoute(map, directionsService,directionsDisplay, numD
     }, function(response, status){
         if(status == "OK"){
             directionsDisplay.setDirections(response);
-            var totalDistance = 0;
+            /*var totalDistance = 0;
             legs = response.routes[0].legs;  
             for(var i=0;i<legs.length;i++){
                 totalDistance += legs[i].distance.value
@@ -51,9 +61,50 @@ function calculateAndDisplayRoute(map, directionsService,directionsDisplay, numD
                     hotelDist = 0
                 }
             }
+            */
+            return response.routes[0].overview_path;
         }
     })
 
+}
+
+function updateRoute(map, directionsService,directionsDisplay, numDays, geocoder, source, destination, waypts){
+    directionsService.route({
+        origin: source,
+        destination: destination,
+        waypoints: waypts,
+        optimizeWaypoints: true,
+        travelMode: "DRIVING"
+    }, function(response, status){
+        if(status == "OK"){
+            directionsDisplay.setDirections(response);
+            /*var totalDistance = 0;
+            legs = response.routes[0].legs;  
+            for(var i=0;i<legs.length;i++){
+                totalDistance += legs[i].distance.value
+            }
+            console.log(numDays)
+            console.log(totalDistance/numDays);
+            var path = response.routes[0].overview_path
+            var hotelDist=0
+            for(var i=0;i<path.length;i+=2){
+                hotelDist += getDistanceFromLatLonInM(path[i].lat(),path[i].lng(),path[i+2].lat(),path[i+2].lng())
+                //console.log(hotelDist)
+                if(hotelDist > totalDistance/numDays){
+                    console.log(returnHotels(path[i].lat(),path[i].lng(),30, '2016-11-13', '2016-11-14'));
+                    var marker = new google.maps.Marker({
+                        position: path[i],
+                        map: map,
+                        title: 'Hotel near here'
+                    });
+                    hotelDist = 0
+                }
+            }
+            */
+            return response.routes[0].overview_path;
+        }
+    })
+    
 }
 
 function getDistanceFromLatLonInM(lat1,lon1,lat2,lon2) {
