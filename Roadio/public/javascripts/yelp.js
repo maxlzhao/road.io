@@ -10,6 +10,7 @@ var test_list = [{lat : 37.8719,
              {lat : 32.8801,
               lng : -117.2340}]
 
+
 // Global constants
 
 var auth = {
@@ -100,7 +101,6 @@ function getNearbyRestaurants(lat, lon, list, categories="food") {
     })
     .done(function(data, textStatus, jqXHR) {
             extract(data, list);
-            console.log(list)
         }
     )
     .fail(function(jqXHR, textStatus, errorThrown) {

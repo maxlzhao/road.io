@@ -1,5 +1,5 @@
 var locationsOnPath =[];
-var totalDistance = 0;
+var totalDistance = 0; // in meters
 var markers=[];
 var directionService;
 var directionsDisplay;
@@ -25,6 +25,10 @@ document.body.addEventListener("click", function(){
     console.log(locationsOnPath)
     console.log(totalDistance)
 });
+
+function getTotalDistanceInMiles(){
+    return totalDistance*0.000621371
+}
 
 function findRoute(source, destination){
     directionsService.route({
