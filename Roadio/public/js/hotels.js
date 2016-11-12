@@ -1,3 +1,5 @@
+//API KEY for amadeus linked to abhi's account:
+var globalAPIKEY = "1NN8rvmFXgT3rGsfyYfJ9zygeZx1sXoU";
 /**
      * Return a list of hotels near a specified location sorted by price.
      * @param {number} latitude - latitude of location, required
@@ -24,7 +26,7 @@ function findHotelsByPrice(latitude, longitude, radius, check_in, check_out, num
     check_out = check_out || findNextDay(check_in);
 	var amadeusURL = "http://api.sandbox.amadeus.com/v1.2/hotels/search-circle?latitude=" + latitude + 
 	"&longitude=" + longitude + "&radius=" + radius + "&check_in=" + check_in + "&check_out=" + check_out + 
-	"&cy=USD&number_of_results=" + num_results + "&apikey=1NN8rvmFXgT3rGsfyYfJ9zygeZx1sXoU";
+	"&cy=USD&number_of_results=" + num_results + "&apikey=" + globalAPIKEY;
 	//console.log(amadeusURL);
 	var xhReq = new XMLHttpRequest();
 	xhReq.open("GET", amadeusURL, true);
@@ -96,7 +98,7 @@ function findHotelsByRating(latitude, longitude, radius, check_in, check_out, nu
     check_out = check_out || findNextDay(check_in);
     var amadeusURL = "http://api.sandbox.amadeus.com/v1.2/hotels/search-circle?latitude=" + latitude + 
     "&longitude=" + longitude + "&radius=" + radius + "&check_in=" + check_in + "&check_out=" + check_out + 
-    "&cy=USD&number_of_results=" + num_results + "&apikey=1NN8rvmFXgT3rGsfyYfJ9zygeZx1sXoU";
+    "&cy=USD&number_of_results=" + num_results + "&apikey=" + globalAPIKEY;
     //console.log(amadeusURL);
     var xhReq = new XMLHttpRequest();
     xhReq.open("GET", amadeusURL, false);
