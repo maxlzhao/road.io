@@ -68,14 +68,13 @@ function findRecommendedRoute(A, B, daysAlotted) {
     });
 }
 */
-function potentialPOIsFreeDays(A,B,startDate,daysAlotted,keywords,callback){
+function potentialPOIsFreeDays(A,B,daysAlotted,keywords,callback){
     findRoute(A,B, function(listOfCoords){
         var daysMinimum = Math.ceil(getTotalDistanceInMiles() / MILES_PER_DAY)
         var daysFree = daysAlotted - daysMinimum 
         console.log(daysMinimum)
         console.log(daysFree)
         var POIs=[]
-        var currentDay=startDate
         getLocationsForWaypoints(listOfCoords,keywords,false, function(potentialPOIs){
             POIs=potentialPOIs
             callback(POIs, daysFree)
@@ -83,31 +82,33 @@ function potentialPOIsFreeDays(A,B,startDate,daysAlotted,keywords,callback){
     })
 }
 function potentialHotels(A,B,startDate,daysAllotted,keywords,callback){
-    var hotel_days=[]
-    var hotel_search_places=[]
-    var hotelQuery=[]
-    var currDist=0
-    for(var i=0;i<listOfCoords.length-1;i++){
-        currDist+=getDistanceFromLatLonInMi(listOfCoords[i].lat(),listOfCoords[i].lng(),listOfCoords[i+1].lat(),listOfCoords[i+1].lng());
-        if(currDist > MILES_PER_DAY){
-            currDist=0
-            hotel_days.push(currentDay)
-            currentDay = findNextDay(currentDay)
-            hotel_search_places.push(listOfCoords[i])//find hotel
+    findRoute(A,B,startDate,function(listOfCoords){
+        var hotel_days=[]
+        var hotel_search_places=[]
+        var hotelQuery=[]
+        var currDist=0
+        for(var i=0;i<listOfCoords.length-1;i++){
+            currDist+=getDistanceFromLatLonInMi(listOfCoords[i].lat(),listOfCoords[i].lng(),listOfCoords[i+1].lat(),listOfCoords[i+1].lng());
+            if(currDist > MILES_PER_DAY){
+                currDist=0
+                hotel_days.push(currentDay)
+                currentDay = findNextDay(currentDay)
+                hotel_search_places.push(listOfCoords[i])//find hotel
+            }
         }
-    }
-    for(var i=0;i<hotel_search_places.length;i++){
-        var bl={}
-        bl["latitude"]=hotel_search_places[i].lat();
-        bl["longitude"]=hotel_search_places[i].lng();
-        bl["radius"]=30;
-        bl["check_in"]=hotel_days[i]
-        bl["check_out"]=findNextDay(hotel_days[i])
-        hotelQuery.push(bl)
-        console.log(hotelQuery)
-    }
-    findHotelsGivenManyLocationsByRating(hotelQuery,10,function(list_of_lists_hotels){
-        callback(list_of_lists_hotels)
+        for(var i=0;i<hotel_search_places.length;i++){
+            var bl={}
+            bl["latitude"]=hotel_search_places[i].lat();
+            bl["longitude"]=hotel_search_places[i].lng();
+            bl["radius"]=30;
+            bl["check_in"]=hotel_days[i]
+            bl["check_out"]=findNextDay(hotel_days[i])
+            hotelQuery.push(bl)
+            console.log(hotelQuery)
+        }
+        findHotelsGivenManyLocationsByRating(hotelQuery,10,function(list_of_lists_hotels){
+            callback(list_of_lists_hotels)
+        });
     });
 }
 

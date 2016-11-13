@@ -1,0 +1,105 @@
+doctype html
+html
+head
+    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+    |     
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    |     
+    title jTinder Touch Slider
+    |     
+    link(rel='stylesheet', type='text/css', href='../stylesheets/jTinder.css')
+body(background='../public/images/bg.png')
+    // start padding container
+    .wrap
+      // start jtinder container
+      #hello
+      #tinderslide
+        ul
+          li.pane1
+            .img
+            |                     
+            .desc Add a description of the image here
+            |                     
+            div Miami Beach
+            |                     
+            .like
+            |                     
+            .dislike
+          |                 
+          li.pane2
+            .img
+            |                     
+            .desc Add a description of the image here
+            |                     
+            div San Francisco
+            |                     
+            .like
+            |                     
+            .dislike
+          |                 
+          li.pane3
+            .img
+            |                     
+            .desc Add a description of the image here
+            |                     
+            div Chicago
+            |                     
+            .like
+            |                     
+            .dislike
+          |                 
+          li.pane4
+            .img
+            |                     
+            .desc Add a description of the image here
+            |                     
+            div New York
+            |                     
+            .like
+            |                     
+            .dislike
+          |                 
+          li.pane5
+            .img
+            |                     
+            .desc Add a description of the image here
+            |                     
+            div Beach
+            |                     
+            .like
+            |                     
+            .dislike
+      // end jtinder container
+    // end padding container
+    // jTinder trigger by buttons
+    .actions
+      a.dislike(href='#')
+        i
+      |         
+      a.like(href='#')
+        i
+    // jTinder status text
+    #status
+    // jQuery lib
+    script(type='text/javascript', src='../js/jquery2.min.js')
+    // transform2d lib
+    script(type='text/javascript', src='../js/jquery.transform2d.js')
+    // jTinder lib
+    script(type='text/javascript', src='../js/jquery.jTinder.js')
+    // jTinder initialization script
+    script(type='text/javascript', src='../js/maps.js')
+    |     
+    script(type='text/javascript', src='../js/hotels.js')
+    |     
+    script(type='text/javascript', src='../js/OAuth.js')
+    |     
+    script(type='text/javascript', src='../js/yelp.js')
+    |     
+    script(type='text/javascript', src='../js/SHA1.js')
+    |     
+    script(type='text/javascript', src='../js/integrator.js')
+    |     
+    script(type='text/javascript', src='../js/main.js')
+    |     
+    script(async='', ,='', defer='', src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDkTV9Cy5HjW1yNNnQxDyZyuiguZ9DYr14&callback=initMap')
+
