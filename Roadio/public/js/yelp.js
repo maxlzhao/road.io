@@ -48,9 +48,9 @@ function getLocationsForWaypoints(listOfCoords, categoriesList, getFood, callbac
     var resultMap = new Map();
     var deferred = [];
     function reversecompare(a,b) {
-        if (a.est_score > b.est_score) {
+        if (a.review_count > b.review_count) {
             return -1;
-        } else if (a.est_score < b.est_score) {
+        } else if (a.review_count < b.review_count) {
             return 1;
         } else {
             return 0;
@@ -97,7 +97,7 @@ function getNearbyRestaurants(lat, lon, categories="food") {
     var terms = 'food';
     var ll = lat.toString() + ',' + lon.toString();
     var category_filter = categories;
-    var sort = 2;
+    //var sort = 2;
 
     var accessor = {
         consumerSecret : auth.consumerSecret,
@@ -108,7 +108,8 @@ function getNearbyRestaurants(lat, lon, categories="food") {
     parameters.push(['term', terms]);
     parameters.push(['ll', ll]);
     parameters.push(['category_filter', category_filter]);
-    parameters.push(['sort', sort]);
+    //parameters.push(['sort', sort]);
+    //parameters.push(['limit', 25]);
     parameters.push(['callback', 'callback']);
     parameters.push(['oauth_consumer_key', auth.consumerKey]);
     parameters.push(['oauth_consumer_secret', auth.consumerSecret]);
@@ -148,7 +149,7 @@ function getNearbyPOI(lat, lon, categories = '') {
     if (categories == '') {
         category_filter = POICategories;
     }
-    var sort = 2;
+    //var sort = 2;
 
     var accessor = {
         consumerSecret : auth.consumerSecret,
@@ -159,7 +160,8 @@ function getNearbyPOI(lat, lon, categories = '') {
     parameters.push(['ll', ll]);
     parameters.push(['category_filter', category_filter]);
     parameters.push(['callback', 'restaurantExtract']);
-    parameters.push(['sort', sort]);
+    //parameters.push(['sort', sort]);
+    //parameters.push(['limit', 500]);
     parameters.push(['oauth_consumer_key', auth.consumerKey]);
     parameters.push(['oauth_consumer_secret', auth.consumerSecret]);
     parameters.push(['oauth_token', auth.accessToken]);
@@ -192,7 +194,7 @@ function getNearbyPOI(lat, lon, categories = '') {
 /* Helper function which extracts relevant information from returned
 JSON, and appends it to a list of results. */
 function extractRestaurants(data, map) {
-    for (i = 0; i < Math.min(data.businesses.length, 5); i++) {
+    for (i = 0; i < Math.min(data.businesses.length, 20); i++) {
         var cats = '';
         for (j = 0; j < Math.min(data.businesses[i].categories.length, 3); j++) {
           cats += data.businesses[i].categories[j][0] + ", ";
@@ -203,6 +205,7 @@ function extractRestaurants(data, map) {
                     coordinate  :  data.businesses[i].location.coordinate,
                     rating      :  data.businesses[i].rating,
                     categories  :  cats,
+                    review_count:  data.businesses[i].review_count,
                     est_score   :  ((data.businesses[i].rating / 5) * data.businesses[i].review_count + 1)
                                    / (data.businesses[i].review_count + 2)};
         map.set(JSON.stringify(temp), temp);
@@ -212,7 +215,7 @@ function extractRestaurants(data, map) {
 /* Helper function which extracts relevant information from returned
 JSON, and appends it to a list of results. */
 function extractPOI(data, map) {
-    for (i = 0; i < Math.min(data.businesses.length, 10); i++) {
+    for (i = 0; i < Math.min(data.businesses.length, 20); i++) {
         var cats = '';
         for (j = 0; j < Math.min(data.businesses[i].categories.length, 3); j++) {
           cats += data.businesses[i].categories[j][0] + ", ";
@@ -223,6 +226,7 @@ function extractPOI(data, map) {
                     coordinate  :  data.businesses[i].location.coordinate,
                     rating      :  data.businesses[i].rating,
                     categories  :  cats,
+                    review_count:  data.businesses[i].review_count,
                     est_score   :  ((data.businesses[i].rating / 5) * data.businesses[i].review_count + 1)
                                    / (data.businesses[i].review_count + 2)};
         map.set(JSON.stringify(temp), temp);
