@@ -4,6 +4,23 @@ var markers=[];
 var directionsService=[];
 var directionsDisplay=[];
 var map;
+$(window).on('load',function () {
+    var url = window.location.href 
+    var urlParams = parseURLParams(url)
+    var A = urlParams["startLocation"][0]
+    var B = urlParams["endLocation"][0]
+    desiredHotels=JSON.parse(localStorage["desiredHotels"])
+    desiredPOIs=JSON.parse(localStorage["desiredPOIs"])
+    waypts=[]
+    for(var i=0;i<desiredHotels.length;i++){
+        waypts.push({lat:desiredHotels[i].latitude,lng:desiredHotels[i].longitude})
+    }
+    for(var i=0;i<desiredPOIs.length;i++){
+        waypts.push({lat:desiredPOIs[i].coordinate.latitude,lng:desiredPOIs[i].coordinate.longitude})
+    }
+    localStorage.clear()
+    updateRoute(A,B,waypts,function(rt){})
+})
 function initMap() {
     directionsService.push(new google.maps.DirectionsService);
     directionsDisplay.push(new google.maps.DirectionsRenderer);
@@ -13,12 +30,8 @@ function initMap() {
     });
     var numDays = 5;
     directionsDisplay[0].setMap(map);
-    var url = window.location.href 
-    var urlParams = parseURLParams(url)
-    var A = urlParams["startLocation"][0]
-    var B = urlParams["endLocation"][0]
     var currentPos;
-    locationsOnPath = findRoute(A, B,function(bl){});
+    //locationsOnPath = findRoute(A, B,function(bl){});
     waypts=[]
     pins=[]
 }
@@ -77,11 +90,12 @@ function updateRoute(source, destination, waypts, callback){
         }else{
             src=waypoints[i]
         }
-        if(i+7 > waypoints.length){
+        if(i+7 >= waypoints.length){
             dest=destination
         }else{
             dest=waypoints[i+7]
         }
+        console.log(waypoints)
         console.log(src)
         console.log(dest)
         directionsService[currIndex].route({
@@ -205,6 +219,6 @@ function parseURLParams(url) {
 }
 function convertDateFormat(date) {
     var dateArr = date.split("%2F")
-    var ret = dateArr[2] + "-" + dateArr[0] + "-" + dateArr[1]
+    var ret = dateArr[0]
     return ret
 }

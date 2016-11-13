@@ -11,13 +11,12 @@ router.get('/map', function(req, res, next){
 	res.render('index', { title: 'Map'})
 })
 
-// NEW UNTESTED CODE
 router.get('/poi', function(req, res, next) {
     res.render('rotationPOIpicker', { title: 'Pick interesting places' } )
 })
 
 router.get('/hotels', function(req, res, next) {
-    res.render('rotationHOTELpicker', { title: 'Pick where to stay' } )
+    res.render('rotationHotelPicker', { title: 'Pick where to stay' } )
 })
 
 module.exports = router;

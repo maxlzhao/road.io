@@ -222,6 +222,14 @@ function extractRestaurants(data, map) {
 /* Helper function which extracts relevant information from returned
 JSON, and appends it to a list of results. */
 function extractPOI(data, map) {
+    for(var ii=0;ii<data.businesses.length;ii++){
+            console.log(typeof(data.businesses[ii].categories))
+            if(typeof(data.businesses[ii].categories) == "undefined"){
+                data.businesses.pop(data.businesses[ii])
+                console.log(data.businesses[ii])
+                ii-=1
+            }
+    }
     for (i = 0; i < Math.min(data.businesses.length, 20); i++) {
         var cats = '';
         for (j = 0; j < Math.min(data.businesses[i].categories.length, 3); j++) {
