@@ -44,7 +44,7 @@ resultArr object fields:
   categories   : The string containing the categories to which
                  a specific restaurant belongs. */
 
-function getLocationsForWaypoints(listOfCoords, categoriesList, getFood, callback) {
+function getLocationsForWaypoints(listOfCoords, categories, getFood, callback) {
     var resultMap = new Map();
     var deferred = [];
     function reversecompare(a,b) {
@@ -59,7 +59,7 @@ function getLocationsForWaypoints(listOfCoords, categoriesList, getFood, callbac
 
     if (getFood) {
         for (i = 0; i < listOfCoords.length; i++) {
-            deferred.push(getNearbyRestaurants(listOfCoords[i].lat(), listOfCoords[i].lng(), categoriesList[i]));
+            deferred.push(getNearbyRestaurants(listOfCoords[i].lat(), listOfCoords[i].lng(), categories));
         }
         $.when.apply($, deferred).done(function(){
           var objects = arguments;
@@ -72,7 +72,7 @@ function getLocationsForWaypoints(listOfCoords, categoriesList, getFood, callbac
         });
     } else {
         for (i = 0; i < listOfCoords.length; i++) {
-            deferred.push(getNearbyPOI(listOfCoords[i].lat(), listOfCoords[i].lng(), categoriesList[i]));
+            deferred.push(getNearbyPOI(listOfCoords[i].lat(), listOfCoords[i].lng(), categories));
         }
         $.when.apply($, deferred).done(function(){
           var objects = arguments;
@@ -201,10 +201,17 @@ function extractRestaurants(data, map) {
         }
         cats = cats.slice(0, -2);
 
+        var image_url = data.businesses[i].image_url;
+        if (typeof image_url != 'undefined') {
+            image_url = data.businesses[i].image_url.slice(0, -6) + 'o.jpg'
+        }
+
         var temp = {name        :  data.businesses[i].name,
                     coordinate  :  data.businesses[i].location.coordinate,
                     rating      :  data.businesses[i].rating,
                     categories  :  cats,
+                    image_url   :  image_url,
+                    snippet_text:  data.businesses[i].snippet_text,
                     review_count:  data.businesses[i].review_count,
                     est_score   :  ((data.businesses[i].rating / 5) * data.businesses[i].review_count + 1)
                                    / (data.businesses[i].review_count + 2)};
@@ -222,10 +229,17 @@ function extractPOI(data, map) {
         }
         cats = cats.slice(0, -2);
 
+        var image_url = data.businesses[i].image_url;
+        if (typeof image_url != 'undefined') {
+            image_url = data.businesses[i].image_url.slice(0, -6) + 'o.jpg'
+        }
+
         var temp = {name        :  data.businesses[i].name,
                     coordinate  :  data.businesses[i].location.coordinate,
                     rating      :  data.businesses[i].rating,
                     categories  :  cats,
+                    image_url   :  image_url,
+                    snippet_text:  data.businesses[i].snippet_text,
                     review_count:  data.businesses[i].review_count,
                     est_score   :  ((data.businesses[i].rating / 5) * data.businesses[i].review_count + 1)
                                    / (data.businesses[i].review_count + 2)};
