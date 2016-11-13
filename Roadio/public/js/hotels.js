@@ -39,7 +39,7 @@ function findHotelsByPrice(latitude, longitude, radius, check_in, check_out, num
             }
         }
     };
-    xhr.onerror = function (e) {
+    xhReq.onerror = function (e) {
         console.error(xhReq.statusText);
     };
 	xhReq.send(null);
@@ -118,7 +118,7 @@ function findHotelsByRating(latitude, longitude, radius, check_in, check_out, nu
         var hotelData = { 
             "averageRating" : averageRating,
             //"address" : hotel["address"],
-            //"awards" : hotel["awards"],
+            "awards" : hotel["awards"],
             //"location" : hotel["location"],
             "latitude" : hotel["location"]["latitude"],
             "longitude" : hotel["location"]["longitude"],
@@ -221,17 +221,17 @@ function findHotelsGivenManyLocationsByPrice(arr_locations, num_results) {
                     .
                     ]} List of Hotel dictionary objects
      */
-function findHotelsGivenManyLocationsByRating(arr_locations, num_results) {
+function findHotelsGivenManyLocationsByRating(arr_locations, num_results, callback) {
     listTotal = [];
     for (objNum in arr_locations) {
         var obj = arr_locations[objNum];
         //console.log(obj);
-        list = findHotelsByPrice(obj["latitude"], obj["longitude"], obj["radius"], obj["check_in"], obj["check_out"], num_results);
+        list = findHotelsByRating(obj["latitude"], obj["longitude"], obj["radius"], obj["check_in"], obj["check_out"], num_results);
         listTotal = listTotal.concat(list);
     }
     listTotal.sort(function(a,b){return a.averageRating - b.averageRating});
     listTotal.reverse();
-    return listTotal;
+    return callback(listTotal);
 }
 
 /**

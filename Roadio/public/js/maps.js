@@ -76,22 +76,23 @@ function updateRoute(source, destination, waypts, callback){
     })
 }
 
-function addPins(map,pins,label){
+function addPins(pins){
     for(var i=0;i<pins.length;i++){
         var marker = new google.maps.Marker({
             position: {lat: pins[i].lat(),lng:pins[i].lng()},
         });
         markers.push(marker)
     }
+    showPins()
 }
 
-function showPins(map){
+function showPins(){
     for(var i=0;i<markers.length;i++){
         markers[i].setMap(map)
     }
 }
 
-function clearPins(markers){
+function clearPins(){
     for(var i=0;i<markers.length;i++){
         markers[i].setMap(null)
     }

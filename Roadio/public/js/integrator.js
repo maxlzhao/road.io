@@ -1,31 +1,51 @@
 // Puts together APIs from maps, hotels, POI, and food to solve the problem
 
-var MILES_PER_DAY = 100
-var TIME_SPENT_AT_POI = 50 //distance (mi)
+var MILES_PER_DAY = 200
+var TIME_SPENT_AT_POI = 200 //distance (mi)
 function findRecommendedRoute(A, B, daysAlotted) {
-    var daysMinimum = Math.ceil(getTotalDistanceInMiles() / MILES_PER_DAY)
-    var daysFree = daysAlotted - daysMinimum 
     findRoute(A, B, function(listOfCords){
-        console.log(listOfCords)
+        var daysMinimum = Math.ceil(getTotalDistanceInMiles() / MILES_PER_DAY)
+        var daysFree = daysAlotted - daysMinimum 
         getLocationsForWaypoints(listOfCords, ["",""], false,function(POIsToVisit){
             //response must be ordered, currently, simply picking the FIRST few give places close to A
+            console.log(daysFree)
             POIsToVisitSpliced = POIsToVisit.splice(0,daysFree+1)
+            console.log(POIsToVisitSpliced)
             updateRoute(A, B, getLatLngs(POIsToVisitSpliced), function(updatedListOfCoords){
                 var currDist = 0
                 var day_num = 0
+                var poi_num=0
+                var hotel_places=[]
+                var latLngsPOIs=getLatLngs(POIsToVisitSpliced)
+
                 for(var i=0;i<updatedListOfCoords.length-1;i++){
-                    currDist+=getDistanceFromLatLonInMi(updatedListOfCoords[i].lat(),getDistanceFromLatLonInM[i].lng(),updatedListOfCoords[i+1].lat(),updatedListOfCoords[i+1].lng();
-                    if point is basically at a POI {
+                    currDist+=getDistanceFromLatLonInMi(updatedListOfCoords[i].lat(),updatedListOfCoords[i].lng(),updatedListOfCoords[i+1].lat(),updatedListOfCoords[i+1].lng());
+                    if(getDistanceFromLatLonInMi(updatedListOfCoords[i].lat(),updatedListOfCoords[i].lng(),latLngsPOIs[poi_num].lat(),latLngsPOIs[poi_num].lng()) < 20){
                         // we say we are at the POI 
+                        poi_num += 1
                         currDist += TIME_SPENT_AT_POI
                     }
                     if(currDist > MILES_PER_DAY){
                         currDist=0
                         day_num += 1 
-                        //find hotel
+                        hotel_places.push(updatedListOfCoords[i])//find hotel
                     }
                 }
-            })
+                addPins(hotel_places)
+                var hotelQuery=[]
+                for(var i=0;i<hotel_places.length;i++){
+                    var bl={}
+                    bl["latitude"]=hotel_places[i].lat();
+                    bl["longitude"]=hotel_places[i].lng();
+                    bl["radius"]=30;
+                    bl["check_in"]="2016-11-12"
+                    bl["check_out"]="2016-11-13"
+                    hotelQuery.push(bl)   
+                }
+                findHotelsGivenManyLocationsByRating(hotelQuery,10, function(hotels){
+                   console.log(hotels) 
+                });
+            });
         });
     });
 }
