@@ -12,12 +12,6 @@ html, body {
   border-radius: 5px;
 }
 
-.description {
-  position: absolute;
-  right: 50%;
-}
-
-
 div.buttons {
   position: absolute;
   width: 180px;
@@ -63,8 +57,23 @@ div.buttons {
   background-color: #aa0000;
 }
 
-#photo-container div.description {
+.freedays{
   position: absolute;
-  left: 50%;
-  transform: translate(-50%, 100%);
+  left: 75%;
+  top: 30%;
+  transform: translate(-50%, 50%);
+}
+
+.title {
+  position: absolute;
+  left: 75%;
+  top: 10%;
+  transform: translate(-50%, 50%);
+}
+
+.review {
+  position: absolute;
+  left: 75%;
+  top: 50%;
+  transform: translate(-50%, 50%);
 }
