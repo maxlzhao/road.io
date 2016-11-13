@@ -69,6 +69,9 @@ function findHotelsByPrice(latitude, longitude, radius, check_in, check_out, num
         };
         listOfHotels.push(hotelData);
     }
+    if (listOfHotels.length <= 0) {
+        return findHotelsByPrice(latitude, longitude, radius + 10, check_in, check_out, num_results);
+    }
     listOfHotels.sort(function(a,b){return a.daily_rate - b.daily_rate});
     return listOfHotels;
 }
@@ -127,6 +130,9 @@ function findHotelsByRating(latitude, longitude, radius, check_in, check_out, nu
             "property_name" : hotel["property_name"],
         };
         listOfHotels.push(hotelData);
+    }
+    if (listOfHotels.length <= 0) {
+        return findHotelsByRating(latitude, longitude, radius + 10, check_in, check_out, num_results);
     }
     listOfHotels.sort(function(a,b){return a.averageRating - b.averageRating});
     listOfHotels.reverse();
