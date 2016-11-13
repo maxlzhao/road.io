@@ -1,40 +1,54 @@
-/**
- * jTinder initialization
- */
+var iterationIndex = 0;
+var desiredPOIs = [];
+var originalPOIs;
+function go() {};
+function not_go() {};
+
 $(window).on('load',function () {
-    var url = window.location.href 
+    var url = window.location.href
     var urlParams = parseURLParams(url)
     var A = urlParams["startLocation"][0]
     var B = urlParams["endLocation"][0]
     var keyword = urlParams["keywords"][0]
     console.log(window.location.href)
     potentialPOIsFreeDays(A,B,3,keyword,function(POIs,freeDays){
-        console.log(POIs)
+        $("#photo-container").find(".front").attr("src", POIs[0].image_url);
+        $("#photo-container").find(".back").attr("src", POIs[1].image_url);
+        originalPOIs = POIs;
+        go = function(){
+            desiredPOIs.push(POIs[iterationIndex]);
+            console.log(iterationIndex);
+            iterationIndex++;
+        };
+        not_go = function(){
+            console.log(iterationIndex);
+            iterationIndex++;
+        };
     });
 });
 
-$("#tinderslide").jTinder({
-	// dislike callback
-    onDislike: function (item) {
-	    // set the status text
-        $('#status').html('Dislike image ' + (item.index()+1));
-    },
-	// like callback
-    onLike: function (item) {
-	    // set the status text
-        $('#status').html('Like image ' + (item.index()+1));
-    },
-	animationRevertSpeed: 200,
-	animationSpeed: 400,
-	threshold: 1,
-	likeSelector: '.like',
-	dislikeSelector: '.dislike'
-});
+$(document).ready(function() {
+  $("#going").click(function(){
+      if ($("#photo-container").find(".front").hasClass("hidden")) {
+          $("#photo-container").find(".front").animate({opacity : 1}, {duration: 200, queue: false});
+          $("#photo-container").find(".back").attr("src", originalPOIs[iterationIndex + 1].image_url);
+      } else {
+          $("#photo-container").find(".front").animate({opacity : 0}, {duration: 200, queue: false});
+          $("#photo-container").find(".front").attr("src", originalPOIs[iterationIndex + 1].image_url);
+      }
+      $("#photo-container").find(".front").toggleClass("hidden");
+      go();
+  });
 
-/**
- * Set button action to trigger jTinder like & dislike.
- */
-$('.actions .like, .actions .dislike').click(function(e){
-	e.preventDefault();
-	$("#tinderslide").jTinder($(this).attr('class'));
+  $("#not-going").click(function(){
+      if ($("#photo-container").find(".front").hasClass("hidden")) {
+          $("#photo-container").find(".front").animate({opacity : 1}, {duration: 200, queue: false});
+          $("#photo-container").find(".back").attr("src", originalPOIs[iterationIndex + 1].image_url);
+      } else {
+          $("#photo-container").find(".front").animate({opacity : 0}, {duration: 200, queue: false});
+          $("#photo-container").find(".front").attr("src", originalPOIs[iterationIndex + 1].image_url);
+      }
+      $("#photo-container").find(".front").toggleClass("hidden");
+      not_go();
+  });
 });

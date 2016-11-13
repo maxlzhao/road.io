@@ -1,0 +1,70 @@
+html, body {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+
+#photo-container {
+  position: absolute;
+  height: 500px;
+  width: 500px;
+  border: 2px black solid;
+  border-radius: 5px;
+}
+
+.description {
+  position: absolute;
+  right: 50%;
+}
+
+
+div.buttons {
+  position: absolute;
+  width: 180px;
+  height: 100px;
+  left: 50%;
+  top: 75%;
+  transform: translate(-50%, -50%);
+}
+#going, #not-going {
+  position: absolute;
+  background-size: cover;
+  height: 80px;
+  width: 80px;
+}
+#going {
+  left: 25%;
+  background-image: url("../images/going.png");
+  left: 25%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+#not-going {
+  left: 75%;
+  background-image: url("../images/notgoing.png");
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#photo-container img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 420px;
+  width: 420px;
+}
+#photo-container img.front {
+  z-index: 1;
+  background-color: #000000;
+}
+
+#photo-container img.back {
+  background-color: #aa0000;
+}
+
+#photo-container div.description {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 100%);
+}
