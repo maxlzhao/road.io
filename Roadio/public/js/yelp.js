@@ -5,10 +5,6 @@
 // <script type="text/javascript" src="https://raw.githubusercontent.com/rmxdave/phnx/master/lib/OAuth/SHA1.js"></script>
 
 // Debugging purposes only
-var test_list = [{lat : 37.8719,
-              lng : -122.2585},
-             {lat : 32.8801,
-              lng : -117.2340}]
 
 
 // Global constants
@@ -41,8 +37,8 @@ resultArr object fields:
   rating       : The rating of the restaurant.
   categories   : The string containing the categories to which
                  a specific restaurant belongs. */
-    
-function getLocationsForWaypoints(listOfCoords, categoriesList, getFood=true, callback) {
+
+function getLocationsForWaypoints(listOfCoords, categoriesList, getFood, callback) {
     var resultArr = [];
     var deferred = [];
     function reversecompare(a,b) {
@@ -65,6 +61,12 @@ function getLocationsForWaypoints(listOfCoords, categoriesList, getFood=true, ca
               extractRestaurants(objects[k][0], resultArr);
           };
           resultArr.sort(reversecompare);
+          for (n = 1; n < resultArr.length; n += 1) {
+              if (resultArr[i - 1].name == resultArr[i].name) {
+                  resultArr.splice(i, 1);
+                  i -= 1;
+              }
+          };
           callback(resultArr);
         });
     } else {
