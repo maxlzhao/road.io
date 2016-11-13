@@ -26,7 +26,7 @@ var auth = {
 };
 
 var POICategories =
-    'amusementparks,climbing,beaches,hiking,sailing,surfing,arts,boatcharters,caricatures,facepainting,magicians,musicians,tours,resorts,skiresorts,localflavor,nightlife,landmarks';
+    'amusementparks,climbing,beaches,hiking,sailing,surfing,arts,boatcharters,caricatures,facepainting,magicians,musicians,landmarks,resorts,skiresorts,nightlife,localflavor';
 
 /* Applies a callback function on a list containing either
 restaurants or points of interest within 25 miles of each location in the LISTOFCOORDS.
@@ -144,7 +144,10 @@ points of interest. Must pass in a list into which the result
 is appended. */
 function getNearbyPOI(lat, lon, categories = '') {
     var ll = lat.toString() + ',' + lon.toString();
-    var category_filter = 'landmarks';
+    var category_filter = categories;
+    if (categories == '') {
+        category_filter = POICategories;
+    }
     var sort = 2;
 
     var accessor = {

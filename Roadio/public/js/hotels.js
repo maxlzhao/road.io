@@ -227,10 +227,10 @@ function findHotelsGivenManyLocationsByRating(arr_locations, num_results, callba
         var obj = arr_locations[objNum];
         //console.log(obj);
         list = findHotelsByRating(obj["latitude"], obj["longitude"], obj["radius"], obj["check_in"], obj["check_out"], num_results);
-        listTotal = listTotal.concat(list);
+        list.sort(function(a,b){return a.averageRating - b.averageRating});
+        list.reverse()
+        listTotal.push(list);
     }
-    listTotal.sort(function(a,b){return a.averageRating - b.averageRating});
-    listTotal.reverse();
     return callback(listTotal);
 }
 
