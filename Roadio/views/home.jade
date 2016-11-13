@@ -4,51 +4,28 @@ html
     meta(name='viewport', content='initial-scale=1.0, user-scalable=no')
     meta(charset='utf-8')
     title Roadio
-
-    //stylesheets
+    // stylesheets
     link(href='../stylesheets/style.css', rel='stylesheet', type='text/css')
     link(href='stylesheets/bootstrap.min.css', rel='stylesheet')
     link(href='stylesheets/style.css', rel='stylesheet')
     link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css')
-
-    //scripts
+    // scripts
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js')
-
-
-
   body
     #home
       .container-fluid
         .row
-          form
-            .form-group
-              .col-xs-2
-                input#ex1.form-control(type='text', placeholder='Starting Point')
-              .col-xs-2
-                input#ex2.form-control(type='text', placeholder='Destination')
-              .col-xs-1
-                input#ex3.form-control(type='text', placeholder='Alotted Time')
-              .col-xs-3
-                input#ex4.form-control(type='text', placeholder='Keywords')
-          .col-md-1
-            button#test.btn.btn-default(type='button') Default
-        .col-md-5
+          form(action='map')
+            input#input1.form-control(type='text', name='input1', placeholder='Starting Point')
+            input#input2.form-control(type='text', name='input2', placeholder='Destination')
+            input#input3.form-control(type='text', name='input3', placeholder='Alotted Time')
+            input#input4.form-control(type='text', name='input4', placeholder='Keywords')
+            input(type='submit', value='Submit')
   .form-group
     #datetimepicker6.input-group.date
       input.form-control(type='text')
       span.input-group-addon
         span.glyphicon.glyphicon-calendar
-.col-md-5
-  .form-group
-    #datetimepicker7.input-group.date
-      input.form-control(type='text')
-      span.input-group-addon
-        span.glyphicon.glyphicon-calendar
-
-    script(src='../js/home.js', type='text/javascript')
-    script(src='js/jquery.min.js')
-    script(src='js/bootstrap.min.js')
-    script(src='js/scripts.js')
