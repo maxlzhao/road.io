@@ -21,7 +21,7 @@ html
     #home
       .container(style='position: absolute; top: 56%; left: 12%; right:12%')
         .row
-          form(action='map')
+          form(action='poi')
             .col-xs-2
               input#input1.form-control(type='text', name='startLocation', placeholder='Starting Point')
             .col-xs-2
@@ -37,5 +37,3 @@ html
 script.
   $( "#input3" ).datetimepicker({format: 'MM/DD/YYYY'});
   $( "#input4" ).datetimepicker({format: 'MM/DD/YYYY'});
-
-
