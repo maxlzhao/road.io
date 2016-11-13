@@ -12,10 +12,11 @@ function initMap() {
       center: {lat: 37, lng: -122}
     });
     var numDays = 5;
-
     directionsDisplay.setMap(map);
-    var A = "2227 Piedmont Avenue"
-    var B = "100 Universal City Plaza, Universal City"
+    var url = window.location.href 
+    var urlParams = parseURLParams(url)
+    var A = urlParams["startLocation"][0]
+    var B = urlParams["endLocation"][0]
     var currentPos;
     locationsOnPath = findRoute(A, B,function(bl){});
     waypts=[]
@@ -146,3 +147,29 @@ function returnHotels(latitude, longitude, radius, check_in, check_out) {
         return callback(currentPosition)
     }
 }*/
+
+
+function parseURLParams(url) {
+    var queryStart = url.indexOf("?") + 1,
+        queryEnd   = url.indexOf("#") + 1 || url.length + 1,
+        query = url.slice(queryStart, queryEnd - 1),
+        pairs = query.replace(/\+/g, " ").split("&"),
+        parms = {}, i, n, v, nv;
+
+    if (query === url || query === "") {
+        return;
+    }
+
+    for (i = 0; i < pairs.length; i++) {
+        nv = pairs[i].split("=");
+        n = decodeURIComponent(nv[0]);
+        v = decodeURIComponent(nv[1]);
+
+        if (!parms.hasOwnProperty(n)) {
+            parms[n] = [];
+        }
+
+        parms[n].push(nv.length === 2 ? v : null);
+    }
+    return parms;
+}
