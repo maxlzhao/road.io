@@ -5,6 +5,12 @@
 // <script type="text/javascript" src="https://raw.githubusercontent.com/rmxdave/phnx/master/lib/OAuth/SHA1.js"></script>
 
 // Debugging purposes only
+var test_list = [{lat : 37.8719,
+              lng : -122.2585},
+             {lat : 32.8801,
+              lng : -117.2340},
+             {lat : 32.8801,
+              lng : -117.2340}]
 
 
 // Global constants
@@ -62,9 +68,9 @@ function getLocationsForWaypoints(listOfCoords, categoriesList, getFood, callbac
           };
           resultArr.sort(reversecompare);
           for (n = 1; n < resultArr.length; n += 1) {
-              if (resultArr[i - 1].name == resultArr[i].name) {
-                  resultArr.splice(i, 1);
-                  i -= 1;
+              if (resultArr[n - 1].name == resultArr[n].name) {
+                  resultArr.splice(n, 1);
+                  n -= 1;
               }
           };
           callback(resultArr);
@@ -79,6 +85,12 @@ function getLocationsForWaypoints(listOfCoords, categoriesList, getFood, callbac
               extractPOI(objects[k][0], resultArr);
           };
           resultArr.sort(reversecompare);
+          for (n = 1; n < resultArr.length; n += 1) {
+              if (resultArr[n - 1].name == resultArr[n].name) {
+                  resultArr.splice(n, 1);
+                  n -= 1;
+              }
+          };
           callback(resultArr);
         });
     }
