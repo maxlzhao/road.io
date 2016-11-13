@@ -26,7 +26,7 @@ var auth = {
 };
 
 var POICategories =
-    'amusementparks,climbing,beaches,hiking,sailing,surfing,arts,boatcharters,caricatures,facepainting,magicians,musicians,landmarks,resorts,skiresorts,nightlife,localflavor';
+    'amusementparks,climbing,beaches,hiking,sailing,surfing,arts,boatcharters,caricatures,facepainting,magicians,musicians,landmarks,resorts,skiresorts,localflavor';
 
 /* Applies a callback function on a list containing either
 restaurants or points of interest within 25 miles of each location in the LISTOFCOORDS.
