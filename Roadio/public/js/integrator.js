@@ -2,6 +2,7 @@
 
 var MILES_PER_DAY = 200
 var TIME_SPENT_AT_POI = 200 //distance (mi)
+/*
 function findRecommendedRoute(A, B, daysAlotted) {
     findRoute(A, B, function(listOfCords){
         var daysMinimum = Math.ceil(getTotalDistanceInMiles() / MILES_PER_DAY)
@@ -17,10 +18,11 @@ function findRecommendedRoute(A, B, daysAlotted) {
                 var poi_num=0
                 var hotel_places=[]
                 var latLngsPOIs=getLatLngs(POIsToVisitSpliced)
+                console.log(latLngsPOIs)
 
                 for(var i=0;i<updatedListOfCoords.length-1;i++){
                     currDist+=getDistanceFromLatLonInMi(updatedListOfCoords[i].lat(),updatedListOfCoords[i].lng(),updatedListOfCoords[i+1].lat(),updatedListOfCoords[i+1].lng());
-                    if(getDistanceFromLatLonInMi(updatedListOfCoords[i].lat(),updatedListOfCoords[i].lng(),latLngsPOIs[poi_num].lat(),latLngsPOIs[poi_num].lng()) < 20){
+                    if(!poi_num > latLngsPOIs.length && getDistanceFromLatLonInMi(updatedListOfCoords[i].lat(),updatedListOfCoords[i].lng(),latLngsPOIs[poi_num].lat(),latLngsPOIs[poi_num].lng()) < 20){
                         // we say we are at the POI 
                         poi_num += 1
                         currDist += TIME_SPENT_AT_POI
@@ -31,7 +33,7 @@ function findRecommendedRoute(A, B, daysAlotted) {
                         hotel_places.push(updatedListOfCoords[i])//find hotel
                     }
                 }
-                addPins(hotel_places)
+                //addPins(hotel_places)
                 var hotelQuery=[]
                 for(var i=0;i<hotel_places.length;i++){
                     var bl={}
@@ -43,12 +45,74 @@ function findRecommendedRoute(A, B, daysAlotted) {
                     hotelQuery.push(bl)   
                 }
                 findHotelsGivenManyLocationsByRating(hotelQuery,10, function(hotels){
-                   console.log(hotels) 
+                    var chosenHotelsLocation=[]
+                    for(var i=0;i<hotels.length;i++){
+                        if(hotels[i].length > 0){
+                            chosenHotelsLocation.push(new google.maps.LatLng(hotels[i][0].latitude,hotels[i][0].longitude))
+                        }
+                    }
+                    addPins(chosenHotelsLocation)
+                    allLocations=[]
+                    for(var i=0;i<chosenHotelsLocation.length;i+=1){
+                        allLocations.push(chosenHotelsLocation[i])
+                    }
+                    for(var i=0;i<latLngsPOIs.length;i++){
+                        allLocations.push(latLngsPOIs[i])
+                    }
+                    updateRoute(A,B,allLocations)
+                    console.log("done")
                 });
+
             });
         });
     });
 }
+*/
+function potentialPOIsFreeDays(A,B,startDate,daysAlotted,keywords,callback){
+    findRoute(A,B, function(listOfCoords){
+        var daysMinimum = Math.ceil(getTotalDistanceInMiles() / MILES_PER_DAY)
+        var daysFree = daysAlotted - daysMinimum 
+        console.log(daysMinimum)
+        console.log(daysFree)
+        var POIs=[]
+        var currentDay=startDate
+        getLocationsForWaypoints(listOfCoords,keywords,false, function(potentialPOIs){
+            POIs=potentialPOIs
+            callback(POIs, daysFree)
+        });
+    })
+}
+function potentialHotels(A,B,startDate,daysAllotted,keywords,callback){
+    var hotel_days=[]
+    var hotel_search_places=[]
+    var hotelQuery=[]
+    var currDist=0
+    for(var i=0;i<listOfCoords.length-1;i++){
+        currDist+=getDistanceFromLatLonInMi(listOfCoords[i].lat(),listOfCoords[i].lng(),listOfCoords[i+1].lat(),listOfCoords[i+1].lng());
+        if(currDist > MILES_PER_DAY){
+            currDist=0
+            hotel_days.push(currentDay)
+            currentDay = findNextDay(currentDay)
+            hotel_search_places.push(listOfCoords[i])//find hotel
+        }
+    }
+    for(var i=0;i<hotel_search_places.length;i++){
+        var bl={}
+        bl["latitude"]=hotel_search_places[i].lat();
+        bl["longitude"]=hotel_search_places[i].lng();
+        bl["radius"]=30;
+        bl["check_in"]=hotel_days[i]
+        bl["check_out"]=findNextDay(hotel_days[i])
+        hotelQuery.push(bl)
+        console.log(hotelQuery)
+    }
+    findHotelsGivenManyLocationsByRating(hotelQuery,10,function(list_of_lists_hotels){
+        callback(list_of_lists_hotels)
+    });
+}
+
+
+
 function getDistanceFromLatLonInMi(lat1,lon1,lat2,lon2) {
     var R = 6371; // Radius of the earth in km
     var dLat = deg2rad(lat2-lat1);  // deg2rad below
@@ -71,4 +135,19 @@ function getLatLngs(yelpList, callback){
     }
     return latlngs
 }
-
+function findNextDay(day) {
+    var year = day.substring(0, 4);
+    var month = day.substring(5, 7);
+    var dayofDay = day.substring(8, 10);
+                    // console.log(year);
+                    //     // console.log(month);
+                    //         // console.log(dayofDay);
+    var today = new Date(year, month, dayofDay, 0, 0, 0, 0);
+    var tomorrow = today;
+    tomorrow.setDate(today.getDate() + 1);
+                    //                         // console.log(tomorrow.getFullYear());
+                    //                             // console.log(tomorrow.getMonth());
+                    //                                 // console.log(tomorrow.getDate());
+    var result = tomorrow.getFullYear() + "-" + tomorrow.getMonth() + "-" + tomorrow.getDate(); 
+    return result;  
+}
