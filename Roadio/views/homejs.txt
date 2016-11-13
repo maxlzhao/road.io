@@ -53,14 +53,8 @@ $("form").each( function(){
         json.form.push(input);
     });    
     console.log(json);
-
-$( "#beginDate" ).datetimepicker();
-$( "#endDate" ).datetimepicker();
-
 });
 });
-
-
 
 function submitform(){
     console.log("hello");

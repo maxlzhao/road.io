@@ -1,0 +1,31 @@
+doctype html
+html
+  head
+    meta(name='viewport', content='initial-scale=1.0, user-scalable=no')
+    meta(charset='utf-8')
+    title Roadio
+    // stylesheets
+    link(href='../stylesheets/style.css', rel='stylesheet', type='text/css')
+    link(href='stylesheets/bootstrap.min.css', rel='stylesheet')
+    link(href='stylesheets/style.css', rel='stylesheet')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css')
+    // scripts
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js')
+  body
+    #home
+      .container-fluid
+        .row
+          form(action='map')
+            input#input1.form-control(type='text', name='input1', placeholder='Starting Point')
+            input#input2.form-control(type='text', name='input2', placeholder='Destination')
+            input#input3.form-control(type='text', name='input3', placeholder='Alotted Time')
+            input#input4.form-control(type='text', name='input4', placeholder='Keywords')
+            input(type='submit', value='Submit')
+  .form-group
+    #datetimepicker6.input-group.date
+      input.form-control(type='text')
+      span.input-group-addon
+        span.glyphicon.glyphicon-calendar

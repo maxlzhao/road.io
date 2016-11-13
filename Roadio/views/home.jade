@@ -9,23 +9,31 @@ html
     link(href='stylesheets/bootstrap.min.css', rel='stylesheet')
     link(href='stylesheets/style.css', rel='stylesheet')
     link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css')
+    link(rel='stylesheet', href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css')
     // scripts
+    script(src='https://code.jquery.com/jquery-1.12.4.js')
+    script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js')
   body
     #home
-      .container-fluid
+      .container(style='position: absolute; top: 56%; left: 12%; right:12%')
         .row
           form(action='poi')
-            input#input1.form-control(type='text', name='startLocation', placeholder='Starting Point')
-            input#input2.form-control(type='text', name='endLocation', placeholder='Destination')
-            input#input3.form-control(type='text', name='input3', placeholder='Alotted Time')
-            input#input4.form-control(type='text', name='keywords', placeholder='Keywords')
-            input(type='submit', value='Submit')
-  form-group
-    #datetimepicker6.input-group.date
-      input.form-control(type='text')
-      span.input-group-addon
-        span.glyphicon.glyphicon-calendar
+            .col-xs-2
+              input#input1.form-control(type='text', name='startLocation', placeholder='Starting Point')
+            .col-xs-2
+              input#input2.form-control(type='text', name='endLocation', placeholder='Destination')
+            .col-xs-2
+              input#input3.form-control(type='text', name='beginDate', placeholder='Start Date')
+            .col-xs-2
+              input#input4.form-control(type='text', name='endDate', placeholder='End Date')
+            .col-xs-3
+              input#input5.form-control(type='text', name='keywords', placeholder='Keywords (Optional)')
+            input#submitButton(type='submit', value='Submit')
+
+script.
+  $( "#input3" ).datetimepicker({format: 'MM/DD/YYYY'});
+  $( "#input4" ).datetimepicker({format: 'MM/DD/YYYY'});
