@@ -1,309 +1,18 @@
 var locationsOnPath =[];
 var totalDistance = 0; // in meters
 var markers=[];
-var directionService;
-var directionsDisplay;
+var directionsService=[];
+var directionsDisplay=[];
 var map;
 function initMap() {
-    directionsService = new google.maps.DirectionsService;
-    directionsDisplay = new google.maps.DirectionsRenderer;
-    var style = [
-    {
-        "featureType": "water",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "hue": "#165c64"
-            },
-            {
-                "saturation": 34
-            },
-            {
-                "lightness": -69
-            },
-            {
-                "visibility": "on"
-            }
-        ]
-    },
-    {
-        "featureType": "landscape",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "hue": "#b7caaa"
-            },
-            {
-                "saturation": -14
-            },
-            {
-                "lightness": -18
-            },
-            {
-                "visibility": "on"
-            }
-        ]
-    },
-    {
-        "featureType": "landscape.man_made",
-        "elementType": "all",
-        "stylers": [
-            {
-                "hue": "#cbdac1"
-            },
-            {
-                "saturation": -6
-            },
-            {
-                "lightness": -9
-            },
-            {
-                "visibility": "on"
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "hue": "#8d9b83"
-            },
-            {
-                "saturation": -89
-            },
-            {
-                "lightness": -12
-            },
-            {
-                "visibility": "on"
-            }
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "hue": "#d4dad0"
-            },
-            {
-                "saturation": -88
-            },
-            {
-                "lightness": 54
-            },
-            {
-                "visibility": "simplified"
-            }
-        ]
-    },
-    {
-        "featureType": "road.arterial",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "hue": "#bdc5b6"
-            },
-            {
-                "saturation": -89
-            },
-            {
-                "lightness": -3
-            },
-            {
-                "visibility": "simplified"
-            }
-        ]
-    },
-    {
-        "featureType": "road.local",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "hue": "#bdc5b6"
-            },
-            {
-                "saturation": -89
-            },
-            {
-                "lightness": -26
-            },
-            {
-                "visibility": "on"
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "hue": "#c17118"
-            },
-            {
-                "saturation": 61
-            },
-            {
-                "lightness": -45
-            },
-            {
-                "visibility": "on"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "all",
-        "stylers": [
-            {
-                "hue": "#8ba975"
-            },
-            {
-                "saturation": -46
-            },
-            {
-                "lightness": -28
-            },
-            {
-                "visibility": "on"
-            }
-        ]
-    },
-    {
-        "featureType": "transit",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "hue": "#a43218"
-            },
-            {
-                "saturation": 74
-            },
-            {
-                "lightness": -51
-            },
-            {
-                "visibility": "simplified"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.province",
-        "elementType": "all",
-        "stylers": [
-            {
-                "hue": "#ffffff"
-            },
-            {
-                "saturation": 0
-            },
-            {
-                "lightness": 100
-            },
-            {
-                "visibility": "simplified"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.neighborhood",
-        "elementType": "all",
-        "stylers": [
-            {
-                "hue": "#ffffff"
-            },
-            {
-                "saturation": 0
-            },
-            {
-                "lightness": 100
-            },
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.locality",
-        "elementType": "labels",
-        "stylers": [
-            {
-                "hue": "#ffffff"
-            },
-            {
-                "saturation": 0
-            },
-            {
-                "lightness": 100
-            },
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.land_parcel",
-        "elementType": "all",
-        "stylers": [
-            {
-                "hue": "#ffffff"
-            },
-            {
-                "saturation": 0
-            },
-            {
-                "lightness": 100
-            },
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative",
-        "elementType": "all",
-        "stylers": [
-            {
-                "hue": "#3a3935"
-            },
-            {
-                "saturation": 5
-            },
-            {
-                "lightness": -57
-            },
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.medical",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "hue": "#cba923"
-            },
-            {
-                "saturation": 50
-            },
-            {
-                "lightness": -46
-            },
-            {
-                "visibility": "on"
-            }
-        ]
-    }
-]
+    directionsService.push(new google.maps.DirectionsService);
+    directionsDisplay.push(new google.maps.DirectionsRenderer);
     map = new google.maps.Map(document.getElementById('map'), {
       zoom: 12,
-      center: {lat: 37, lng: -122},
-      styles: style
+      center: {lat: 37, lng: -122}
     });
     var numDays = 5;
-    directionsDisplay.setMap(map);
+    directionsDisplay[0].setMap(map);
     var url = window.location.href 
     var urlParams = parseURLParams(url)
     var A = urlParams["startLocation"][0]
@@ -324,13 +33,18 @@ function getTotalDistanceInMiles(){
 }
 
 function findRoute(source, destination, callback){
-    directionsService.route({
+    directionsService=[]
+    directionsDisplay=[]
+    directionsService.push(new google.maps.DirectionsService)
+    directionsDisplay.push(new google.maps.DirectionsRenderer)
+    directionsDisplay[0].setMap(map)
+    directionsService[0].route({
         origin: source,
         destination: destination,
         travelMode: "DRIVING"
     }, function(response, status){
         if(status == "OK"){
-            directionsDisplay.setDirections(response);
+            directionsDisplay[0].setDirections(response);
             locationsOnPath = response.routes[0].overview_path;
             route_legs=response.routes[0].legs
             totalDistance = 0;
@@ -344,34 +58,59 @@ function findRoute(source, destination, callback){
 }
 //assume waypoints are latlngs
 function updateRoute(source, destination, waypts, callback){
+    //addPins(waypts)
+    clearDisplay(directionsDisplay)
     waypoints=[]
+    directionsService=[]
+    directionsDisplay=[]
     for(var i=0;i<waypts.length;i++){
-        waypoints[i]={location:waypts[i]}
+        waypoints.push({location: new google.maps.LatLng(waypts[i].lat,waypts[i].lng)})
     }
-    directionsService.route({
-        origin: source,
-        destination: destination,
-        waypoints: waypoints,
-        optimizeWaypoints: true,
-        travelMode: "DRIVING"
-    }, function(response, status){
-        if(status == "OK"){
-            directionsDisplay.setDirections(response);
-            route_legs=response.routes[0].legs
-            totalDistance = 0;
-            for(var i=0;i<route_legs.length;i++){
-                totalDistance += route_legs[i].distance.value
-                console.log(route_legs[i])
-            }
-            callback(response.routes[0].overview_path);
+    currIndex=0
+    for(var i=0;i<waypoints.length;i+=7){
+        directionsService.push(new google.maps.DirectionsService)
+        directionsDisplay.push(new google.maps.DirectionsRenderer)
+        var src;
+        var dest;
+        if(i == 0){
+            src=source
+        }else{
+            src=waypoints[i]
         }
-    })
+        if(i+7 > waypoints.length){
+            dest=destination
+        }else{
+            dest=waypoints[i+7]
+        }
+        console.log(src)
+        console.log(dest)
+        directionsService[currIndex].route({
+            origin:src,
+            destination:dest,
+            waypoints:waypoints.slice(i,i+7),
+            optimizeWaypoints: true,
+            travelMode: "DRIVING"
+        },function(response,status){
+            console.log(status)
+            if(status == "OK"){
+                directionsDisplay[currIndex].setMap(map)
+                directionsDisplay[currIndex].setDirections(response)
+                console.log(directionsDisplay[currIndex])
+                currIndex+=1
+            }
+        })
+    }
+}
+function clearDisplay(directionsDisplay){
+    for(var i=0;i<directionsDisplay.length;i++){
+        directionsDisplay[i].setMap(null)
+    }
 }
 
 function addPins(pins){
     for(var i=0;i<pins.length;i++){
         var marker = new google.maps.Marker({
-            position: {lat: pins[i].lat(),lng:pins[i].lng()},
+            position: {lat: pins[i].lat,lng:pins[i].lng},
         });
         markers.push(marker)
     }
