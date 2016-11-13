@@ -1,6 +1,14 @@
 /**
  * jTinder initialization
  */
+$(window).on('load',function () {
+    console.log("sd")
+    potentialPOIsFreeDays("Fremont","San Diego",3,"",function(POIs,freeDays){
+        console.log(POIs)
+        console.log(freeDays)
+    });
+});
+
 $("#tinderslide").jTinder({
 	// dislike callback
     onDislike: function (item) {
