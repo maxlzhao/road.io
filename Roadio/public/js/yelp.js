@@ -45,7 +45,7 @@ resultArr object fields:
                  a specific restaurant belongs. */
 
 function getLocationsForWaypoints(listOfCoords, categoriesList, getFood, callback) {
-    var resultArr = [];
+    var resultMap = new Map();
     var deferred = [];
     function reversecompare(a,b) {
         if (a.est_score > b.est_score) {
@@ -64,15 +64,10 @@ function getLocationsForWaypoints(listOfCoords, categoriesList, getFood, callbac
         $.when.apply($, deferred).done(function(){
           var objects = arguments;
           for (k = 0; k < listOfCoords.length; k += 1) {
-              extractRestaurants(objects[k][0], resultArr);
+              extractRestaurants(objects[k][0], resultMap);
           };
+          resultArr = Array.from(resultMap.values());
           resultArr.sort(reversecompare);
-          for (n = 1; n < resultArr.length; n += 1) {
-              if (resultArr[n - 1].name == resultArr[n].name) {
-                  resultArr.splice(n, 1);
-                  n -= 1;
-              }
-          };
           callback(resultArr);
         });
     } else {
@@ -82,15 +77,10 @@ function getLocationsForWaypoints(listOfCoords, categoriesList, getFood, callbac
         $.when.apply($, deferred).done(function(){
           var objects = arguments;
           for (k = 0; k < listOfCoords.length; k += 1) {
-              extractPOI(objects[k][0], resultArr);
+              extractPOI(objects[k][0], resultMap);
           };
+          resultArr = Array.from(resultMap.values());
           resultArr.sort(reversecompare);
-          for (n = 1; n < resultArr.length; n += 1) {
-              if (resultArr[n - 1].name == resultArr[n].name) {
-                  resultArr.splice(n, 1);
-                  n -= 1;
-              }
-          };
           callback(resultArr);
         });
     }
@@ -198,38 +188,40 @@ function getNearbyPOI(lat, lon, list, categories = '') {
 
 /* Helper function which extracts relevant information from returned
 JSON, and appends it to a list of results. */
-function extractRestaurants(data, list) {
+function extractRestaurants(data, map) {
     for (i = 0; i < Math.min(data.businesses.length, 5); i++) {
-      var cats = '';
-      for (j = 0; j < Math.min(data.businesses[i].categories.length, 3); j++) {
-        cats += data.businesses[i].categories[j][0] + ", ";
-      }
-      cats = cats.slice(0, -2);
+        var cats = '';
+        for (j = 0; j < Math.min(data.businesses[i].categories.length, 3); j++) {
+          cats += data.businesses[i].categories[j][0] + ", ";
+        }
+        cats = cats.slice(0, -2);
 
-      list.push({name        :  data.businesses[i].name,
-                 coordinate  :  data.businesses[i].location.coordinate,
-                 rating      :  data.businesses[i].rating,
-                 categories  :  cats,
-                 est_score   :  ((data.businesses[i].rating / 5) * data.businesses[i].review_count + 1)
-                                / (data.businesses[i].review_count + 2)});
+        var temp = {name        :  data.businesses[i].name,
+                    coordinate  :  data.businesses[i].location.coordinate,
+                    rating      :  data.businesses[i].rating,
+                    categories  :  cats,
+                    est_score   :  ((data.businesses[i].rating / 5) * data.businesses[i].review_count + 1)
+                                   / (data.businesses[i].review_count + 2)};
+        map.set(JSON.stringify(temp), temp);
     }
 }
 
 /* Helper function which extracts relevant information from returned
 JSON, and appends it to a list of results. */
-function extractPOI(data, list) {
+function extractPOI(data, map) {
     for (i = 0; i < Math.min(data.businesses.length, 10); i++) {
-      var cats = '';
-      for (j = 0; j < Math.min(data.businesses[i].categories.length, 3); j++) {
-        cats += data.businesses[i].categories[j][0] + ", ";
-      }
-      cats = cats.slice(0, -2);
+        var cats = '';
+        for (j = 0; j < Math.min(data.businesses[i].categories.length, 3); j++) {
+          cats += data.businesses[i].categories[j][0] + ", ";
+        }
+        cats = cats.slice(0, -2);
 
-      list.push({name         : data.businesses[i].name,
-                 coordinate   : data.businesses[i].location.coordinate,
-                 rating       : data.businesses[i].rating,
-                 categories   : cats,
-                 est_score    : ((data.businesses[i].rating / 5) * data.businesses[i].review_count + 1)
-                                / (data.businesses[i].review_count + 2)});
+        var temp = {name        :  data.businesses[i].name,
+                    coordinate  :  data.businesses[i].location.coordinate,
+                    rating      :  data.businesses[i].rating,
+                    categories  :  cats,
+                    est_score   :  ((data.businesses[i].rating / 5) * data.businesses[i].review_count + 1)
+                                   / (data.businesses[i].review_count + 2)};
+        map.set(JSON.stringify(temp), temp);
     }
 }
