@@ -6,7 +6,7 @@ html, body {
 }
 
 body::before {
-  background: url(/images/bg.png) no-repeat center center fixed;
+  background: url(../images/bg.png) no-repeat center center fixed;
   overflow: hidden;
   content: '';
   z-index: -1;
@@ -155,7 +155,7 @@ width: 100%;
 /* Action - buttons */
 .actions {
     text-align: center;
-    width: 304px;
+    width: 100%;
     margin: 0 auto;
     overflow: hidden;
 }
@@ -168,53 +168,29 @@ width: 100%;
 
 .actions a i {
     display: inline-block;
-    width: 40px;
+    width: 80px;
     height: 80px;
 }
 
-#tinderslide .like{
-  max-width:100%;
-  height:auto;
-}
-#tinderslide .dislike{
-  max-width:100%;
-  height:auto;
-}
 .actions a.dislike i {
     background: url("../images/notgoing.png") no-repeat scroll center center;
-    background-size:cover;
+    background-size : cover
 }
 
 .actions a.like i {
     background: url("../images/going.png") no-repeat scroll center center;
-    background-size:cover;
+    background-size : cover
 }
 
 .actions a {
-    float: left;
-    display: block;
-    background-color: #f7f7f7;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#e7e7e7));
-    background-image: -webkit-linear-gradient(top, #f7f7f7, #e7e7e7);
-    background-image: -moz-linear-gradient(top, #f7f7f7, #e7e7e7);
-    background-image: -ms-linear-gradient(top, #f7f7f7, #e7e7e7);
-    background-image: -o-linear-gradient(top, #f7f7f7, #e7e7e7);
-    color: #a7a7a7;
-    margin: 36px;
-    width: 80px;
-    height: 80px;
-    position: relative;
-    text-align: center;
-    line-height: 144px;
-    border-radius: 50%;
-    outline: none;
-    box-shadow: 0px 3px 8px #aaa, inset 0px 2px 3px #fff;
+    -webkit-transition: background-color 2s, color 2s;
+    transition: background-color 1s, color 1s;
 }
 
 .actions a:hover{
   text-decoration: none;
   color: #555;
-  background: #f5f5f5;
+  background: #F0E68C;
 }
 
 /* jTinder images */
