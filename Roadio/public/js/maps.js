@@ -1,18 +1,18 @@
 var locationsOnPath =[];
 var totalDistance = 0; // in meters
 var markers=[];
-var directionService;
-var directionsDisplay;
+var directionsService=[];
+var directionsDisplay=[];
 var map;
 function initMap() {
-    directionsService = new google.maps.DirectionsService;
-    directionsDisplay = new google.maps.DirectionsRenderer;
+    directionsService.push(new google.maps.DirectionsService);
+    directionsDisplay.push(new google.maps.DirectionsRenderer);
     map = new google.maps.Map(document.getElementById('map'), {
       zoom: 12,
       center: {lat: 37, lng: -122}
     });
     var numDays = 5;
-    directionsDisplay.setMap(map);
+    directionsDisplay[0].setMap(map);
     var url = window.location.href 
     var urlParams = parseURLParams(url)
     var A = urlParams["startLocation"][0]
@@ -33,13 +33,18 @@ function getTotalDistanceInMiles(){
 }
 
 function findRoute(source, destination, callback){
-    directionsService.route({
+    directionsService=[]
+    directionsDisplay=[]
+    directionsService.push(new google.maps.DirectionsService)
+    directionsDisplay.push(new google.maps.DirectionsRenderer)
+    directionsDisplay[0].setMap(map)
+    directionsService[0].route({
         origin: source,
         destination: destination,
         travelMode: "DRIVING"
     }, function(response, status){
         if(status == "OK"){
-            directionsDisplay.setDirections(response);
+            directionsDisplay[0].setDirections(response);
             locationsOnPath = response.routes[0].overview_path;
             route_legs=response.routes[0].legs
             totalDistance = 0;
@@ -53,34 +58,59 @@ function findRoute(source, destination, callback){
 }
 //assume waypoints are latlngs
 function updateRoute(source, destination, waypts, callback){
+    //addPins(waypts)
+    clearDisplay(directionsDisplay)
     waypoints=[]
+    directionsService=[]
+    directionsDisplay=[]
     for(var i=0;i<waypts.length;i++){
-        waypoints[i]={location:waypts[i]}
+        waypoints.push({location: new google.maps.LatLng(waypts[i].lat,waypts[i].lng)})
     }
-    directionsService.route({
-        origin: source,
-        destination: destination,
-        waypoints: waypoints,
-        optimizeWaypoints: true,
-        travelMode: "DRIVING"
-    }, function(response, status){
-        if(status == "OK"){
-            directionsDisplay.setDirections(response);
-            route_legs=response.routes[0].legs
-            totalDistance = 0;
-            for(var i=0;i<route_legs.length;i++){
-                totalDistance += route_legs[i].distance.value
-                console.log(route_legs[i])
-            }
-            callback(response.routes[0].overview_path);
+    currIndex=0
+    for(var i=0;i<waypoints.length;i+=7){
+        directionsService.push(new google.maps.DirectionsService)
+        directionsDisplay.push(new google.maps.DirectionsRenderer)
+        var src;
+        var dest;
+        if(i == 0){
+            src=source
+        }else{
+            src=waypoints[i]
         }
-    })
+        if(i+7 > waypoints.length){
+            dest=destination
+        }else{
+            dest=waypoints[i+7]
+        }
+        console.log(src)
+        console.log(dest)
+        directionsService[currIndex].route({
+            origin:src,
+            destination:dest,
+            waypoints:waypoints.slice(i,i+7),
+            optimizeWaypoints: true,
+            travelMode: "DRIVING"
+        },function(response,status){
+            console.log(status)
+            if(status == "OK"){
+                directionsDisplay[currIndex].setMap(map)
+                directionsDisplay[currIndex].setDirections(response)
+                console.log(directionsDisplay[currIndex])
+                currIndex+=1
+            }
+        })
+    }
+}
+function clearDisplay(directionsDisplay){
+    for(var i=0;i<directionsDisplay.length;i++){
+        directionsDisplay[i].setMap(null)
+    }
 }
 
 function addPins(pins){
     for(var i=0;i<pins.length;i++){
         var marker = new google.maps.Marker({
-            position: {lat: pins[i].lat(),lng:pins[i].lng()},
+            position: {lat: pins[i].lat,lng:pins[i].lng},
         });
         markers.push(marker)
     }

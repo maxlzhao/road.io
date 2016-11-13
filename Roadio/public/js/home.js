@@ -1,67 +1,39 @@
+var animate, left=0, imgObj=null, report = document.getElementById('report'), i=0;
 
-$(function(){
+function init(){
+    var input1 = document.getElementById('input1');
+    var autocomplete1 = new google.maps.places.Autocomplete(input1);
+    var input2 = document.getElementById('input2');
+    var autocomplete2 = new google.maps.places.Autocomplete(input2);
+   imgObj = document.getElementById('logo');
+   imgObj.style.position= 'absolute'; 
+   imgObj.style.top = '240px';
+   imgObj.style.left = '-300px';
+   imgObj.style.visibility='hidden';
 
-$('#test').on('click', function (e) {
-    window.location.href = '/map'
-});
+   moveRight();
+}google.maps.event.addDomListener(window, 'load', init);
+
+
+function moveRight(){
+    left = parseInt(imgObj.style.left, 10);
     
-// $('#datetimepicker6').datetimepicker();
-//             $('#datetimepicker7').datetimepicker({
-//                 useCurrent: false //Important! See issue #1075
-//             });
-//             $("#datetimepicker6").on("dp.change", function (e) {
-//                 $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
-//             });
-//             $("#datetimepicker7").on("dp.change", function (e) {
-//                 $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
-//             });
+    if (10 >= left) {
+        imgObj.style.left = (left + 5) + 'px';
+        imgObj.style.visibility='visible';
 
-// document.getElementById("imputForm").submit();
+        animate = setTimeout(function(){moveRight();},20); // call moveRight in 20msec
 
-// $("form").each( function(){
-//     var json = {"form": []};
-//     $(this).find("input").each( function(){
-//         var input = {};
-//         $.each(this.attributes, function(){
-//             if(this.specified){
-//                 input[this.name] = this.value;   
-//             }
-//         });
-//         json.form.push(input);
-//     });    
-//     console.log(json);
-//     window.location.href = '/map'
-// });
-
-// $('#inputform').submit(function() {
-//     console.log("hello");
-// $.post('ajax/input.jade', function(data) {      
-// });
-//   console.log("hello");
-//   return false;
-// });
-
-$("form").each( function(){
-    var json = {"form": []};
-    $(this).find("input").each( function(){
-        var input = {};
-        $.each(this.attributes, function(){
-            if(this.specified){
-                input[this.name] = this.value;   
-            }
-        });
-        json.form.push(input);
-    });    
-    console.log(json);
-
-$( "#beginDate" ).datetimepicker();
-$( "#endDate" ).datetimepicker();
-
-});
-});
-
-
-
-function submitform(){
-    console.log("hello");
+        //stopanimate = setTimeout(moveRight,20);
+    } else {
+        stop();
+    }
+    //f();
 }
+
+function stop(){
+   clearTimeout(animate);
+}
+// starting
+
+window.onload = function() {init();};
