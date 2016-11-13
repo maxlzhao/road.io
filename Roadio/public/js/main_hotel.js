@@ -6,7 +6,7 @@ function go() {};
 function not_go() {};
 
 $(document).ready(function () {
-    console.log("ASDASD")
+    //console.log("ASDASD")
     var url = window.location.href
     var urlParams = parseURLParams(url)
     var A = urlParams["startLocation"][0]
@@ -14,12 +14,12 @@ $(document).ready(function () {
     var time_start = convertDateFormat(urlParams["beginDate"][0])
     var time_end = convertDateFormat(urlParams["endDate"][0])
     var allotted=parseInt(time_end.substring(3,5))-parseInt(time_start.substring(3,5))
-    console.log(url)
+    //console.log(url)
     potentialHotels(A,B,"2016-11-14",allotted,function(hotels){
-        console.log(hotels)
+        //console.log(hotels)
         //$("#photo-container").find(".front").attr("src", POIs[0].image_url);
         //$("#photo-container").find(".back").attr("src", POIs[1].image_url);
-        $(".title").text(hotels[0][0].property_name);
+        $(".title1").text(hotels[0][0].property_name);
         //$(".review").text(list_of_list_hotels[0].snippet_text);
         originalHotels = hotels;
 
@@ -36,7 +36,7 @@ $(document).ready(function () {
               console.log(iterationIndex);
               hotelAreaIndex++;
               iterationIndex=0;
-              $(".title").text(hotels[hotelAreaIndex][iterationIndex].property_name);
+              $(".title1").text(hotels[hotelAreaIndex][iterationIndex].property_name);
               //$(".review").text(POIs[iterationIndex].snippet_text);
             }
             
@@ -47,7 +47,7 @@ $(document).ready(function () {
               if(iterationIndex+1 == hotels[hotelAreaIndex].length){
                 go()
               }
-              $(".title").text(hotels[hotelAreaIndex][iterationIndex].property_name);
+              $(".title1").text(hotels[hotelAreaIndex][iterationIndex].property_name);
               //$(".review").text(POIs[iterationIndex].snippet_text);
         };
     });
