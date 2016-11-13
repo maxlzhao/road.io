@@ -72,7 +72,7 @@ function getLocationsForWaypoints(listOfCoords, categoriesList, getFood, callbac
         });
     } else {
         for (i = 0; i < listOfCoords.length; i++) {
-            deferred.push(getNearbyPOI(listOfCoords[i].lat(), listOfCoords[i].lng(), resultArr, categoriesList[i]));
+            deferred.push(getNearbyPOI(listOfCoords[i].lat(), listOfCoords[i].lng(), categoriesList[i]));
         }
         $.when.apply($, deferred).done(function(){
           var objects = arguments;
@@ -142,7 +142,7 @@ function getNearbyRestaurants(lat, lon, categories="food") {
 /* Makes a request through the Yelp API to obtain a list of nearby
 points of interest. Must pass in a list into which the result
 is appended. */
-function getNearbyPOI(lat, lon, list, categories = '') {
+function getNearbyPOI(lat, lon, categories = '') {
     var ll = lat.toString() + ',' + lon.toString();
     var category_filter = 'landmarks';
     var sort = 2;
