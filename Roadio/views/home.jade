@@ -11,12 +11,16 @@ html
     link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css')
     link(rel='stylesheet', href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css')
     // scripts
+    script(src='../js/home.js', type='text/javascript')
+    script(src='https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places')
     script(src='https://code.jquery.com/jquery-1.12.4.js')
     script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js')
+
+
   body
     #home
       .container(style='position: absolute; top: 56%; left: 12%; right:12%')
@@ -34,9 +38,16 @@ html
               input#input5.form-control(type='text', name='keywords', placeholder='Keywords (Optional)')
             input#submitButton(type='submit', value='Submit')
 
-      input#rohansbutton(type='button', value='Rohans Button', onclick= "window.location.href = '/map';")
+      input#rohansbutton(type='button', value='Rohans Button', onclick= "window.location.href = '/map'")
 
 
 script.
   $( "#input3" ).datetimepicker({format: 'MM/DD/YYYY'});
   $( "#input4" ).datetimepicker({format: 'MM/DD/YYYY'});
+  function init() {
+  var input1 = document.getElementById('input1');
+  var autocomplete1 = new google.maps.places.Autocomplete(input1);
+  var input2 = document.getElementById('input2');
+  var autocomplete2 = new google.maps.places.Autocomplete(input2);
+  }
+  google.maps.event.addDomListener(window, 'load', init);
