@@ -173,3 +173,8 @@ function parseURLParams(url) {
     }
     return parms;
 }
+function convertDateFormat(date) {
+    var dateArr = date.split("%2F")
+    var ret = dateArr[2] + "-" + dateArr[0] + "-" + dateArr[1]
+    return ret
+}

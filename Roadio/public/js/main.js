@@ -2,10 +2,14 @@
  * jTinder initialization
  */
 $(window).on('load',function () {
-    console.log("sd")
-    potentialPOIsFreeDays("Fremont","San Diego",3,"",function(POIs,freeDays){
+    var url = window.location.href 
+    var urlParams = parseURLParams(url)
+    var A = urlParams["startLocation"][0]
+    var B = urlParams["endLocation"][0]
+    var keyword = urlParams["keywords"][0]
+    console.log(window.location.href)
+    potentialPOIsFreeDays(A,B,3,keyword,function(POIs,freeDays){
         console.log(POIs)
-        console.log(freeDays)
     });
 });
 
