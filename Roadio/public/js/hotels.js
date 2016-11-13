@@ -58,7 +58,8 @@ function findHotelsByPrice(latitude, longitude, radius, check_in, check_out, num
         averageRating = hotel["awards"].length > 0 ? averageRating / hotel["awards"].length : 0;
         var hotelData = { 
             "averageRating" : averageRating,
-            //"address" : hotel["address"],
+            "address" : hotel["address"],
+            "image"   : hotel["images"][0].url,
             //"awards" : hotel["awards"],
             //"location" : hotel["location"],
             "latitude" : hotel["location"]["latitude"],

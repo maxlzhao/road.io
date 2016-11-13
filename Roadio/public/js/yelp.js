@@ -16,10 +16,10 @@ var test_list = [{lat : 37.8719,
 // Global constants
 
 var auth = {
-    consumerKey : "NP1wcdFPMAvBPdCOJzLE0Q",
-    consumerSecret : "YYWx9_1mm-RavY30d_pCOSezTfQ",
-    accessToken : "YoOQDiRBW0B6KCkHdbdgCw0TYmoy7v6t",
-    accessTokenSecret : "mS2xHZeID7dumI8zV6SzXOBcdZE",
+    consumerKey : "DzFfd3R7x2jQoI9LoifIlA",
+    consumerSecret : "Dx-7RidadSp1Q2jb6oBpRZ2XgqY",
+    accessToken : "jfWrC3TRSNrwb7AXyq7x-lGInRBlWwfT",
+    accessTokenSecret : "JTaobuhrgTZNt10eV41qj652SO0",
     serviceProvider : {
         signatureMethod : "HMAC-SHA1"
     }

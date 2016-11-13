@@ -4,6 +4,19 @@ var originalPOIs;
 function go() {};
 function not_go() {};
 
+document.onreadystatechange = function () {
+  var state = document.readyState
+  if (state == 'interactive') {
+       document.getElementById('contents').style.visibility="hidden";
+  } else if (state == 'complete') {
+      setTimeout(function(){
+         document.getElementById('interactive');
+         document.getElementById('load').style.visibility="hidden";
+         document.getElementById('contents').style.visibility="visible";
+      },1000);
+  }
+}
+
 $(document).ready(function () {
     var url = window.location.href
     var urlParams = parseURLParams(url)
@@ -13,10 +26,10 @@ $(document).ready(function () {
     var time_start_formatted=convertDateFormat(time_start)
     var time_end = urlParams["endDate"][0]
     var time_end_formatted = convertDateFormat(time_end)
-    console.log(parseInt(time_end.substring(3,5)))
+    //console.log(parseInt(time_end.substring(3,5)))
     var allotted=parseInt(time_end_formatted.substring(3,5))-parseInt(time_start_formatted.substring(3,5))
     var keyword = urlParams["keywords"][0]
-    console.log(window.location.href)
+    //console.log(window.location.href)
     potentialPOIsFreeDays(A,B,allotted,keyword,function(POIs,freeDays){
         $("#photo-container").find(".front").attr("src", POIs[0].image_url);
         $("#photo-container").find(".back").attr("src", POIs[1].image_url);
